@@ -3,12 +3,19 @@
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import tiles from '$lib/tiles.json';
 	import { projects } from '$lib/data';
-	let activeProject = $state<string | null>(null);
+	let selectedProject = $state<string | null>(null);
+	let hoveredProject = $state<string | null>(null);
+	const activeProject = $derived(hoveredProject ?? selectedProject);
+	function previewProject(event: PointerEvent, slug: string) {
+		if (event.pointerType === 'mouse' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+			hoveredProject = slug;
+		}
+	}
 	function revealProject(event: MouseEvent, slug: string) {
 		if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 		if (activeProject === slug) return;
 		event.preventDefault();
-		activeProject = slug;
+		selectedProject = slug;
 	}
 	const groupSize = 5;
 	const overviewTiles = tiles.map((tile, index) => {
@@ -24,7 +31,12 @@
 </script>
 
 <svelte:head><title>Survol — Bureau Normal</title></svelte:head>
-<svelte:window onkeydown={(event) => { if (event.key === 'Escape') activeProject = null; }} />
+<svelte:window onkeydown={(event) => {
+	if (event.key === 'Escape') {
+		selectedProject = null;
+		hoveredProject = null;
+	}
+}} />
 <Header />
 <div class="overview-container">
 	<main id="main" class="overview" data-node-id="770:10208" aria-label="Survol des projets">
@@ -35,6 +47,8 @@
 				style:--highlight-delay={`${(tile.number - 1) * 85}ms`}
 				data-project={tile.project.slug}
 				href={`/projet/${tile.project.slug}`}
+				onpointerenter={(event) => previewProject(event, tile.project.slug)}
+				onpointerleave={() => (hoveredProject = null)}
 				onclick={(event) => revealProject(event, tile.project.slug)}
 				aria-label={`Projet ${tile.projectNumber} — ${tile.project.title}, image ${tile.number} sur ${tile.total} — ${activeProject === tile.project.slug ? 'ouvrir la première diapositive' : 'afficher le nom du projet'}`}
 				data-node-id={tile.node}

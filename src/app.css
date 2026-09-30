@@ -914,7 +914,7 @@ a:hover {
 }
 .landing-experience.gallery-open .landing {
 	transform: translate3d(0, -100dvh, 0);
-	transition-duration: 1100ms;
+	transition-duration: 950ms;
 	transition-delay: 300ms;
 }
 .landing-experience.gallery-ready .landing {
