@@ -127,7 +127,7 @@
 		</div>
 		<div class="tablet-view"><IndexAccordion projects={sortedProjects} {sortKey} {sortDirection} onchangeSort={changeSort} /></div>
 	</main>
-	<OverviewFooter />
+	<OverviewFooter contacts />
 </div>
 
 <style>
@@ -249,9 +249,6 @@
 		.index-shell :global(.nav-link.active) {
 			text-underline-offset: 3px;
 		}
-		.index-shell :global(.overview-footer) {
-			display: none;
-		}
 		.index-preview-rail {
 			width: 100%;
 			height: 180px;
@@ -296,9 +293,6 @@
 		.index-shell :global(.nav-2) { grid-column: 4; }
 		.index-shell :global(.nav-link.active) {
 			text-underline-offset: 3px;
-		}
-		.index-shell :global(.overview-footer) {
-			display: none;
 		}
 	}
 </style>

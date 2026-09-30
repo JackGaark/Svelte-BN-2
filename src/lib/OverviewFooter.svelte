@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Footer from './Footer.svelte';
 	import BlinkingEye from './BlinkingEye.svelte';
+	let { contacts = false }: { contacts?: boolean } = $props();
 	let width = $state(1440);
 </script>
 
@@ -29,7 +30,7 @@
 			<span class="footer-eye-top"><BlinkingEye /></span>
 		</span>
 	</a>
-	<Footer mark={false} />
+	<Footer mark={false} {contacts} />
 </div>
 
 <style>
