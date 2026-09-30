@@ -39,7 +39,8 @@
 	.overview-footer-logo {
 		display: block;
 		position: relative;
-		width: 100%;
+		width: calc(100% - 2 * var(--margin));
+		margin-inline: var(--margin);
 		aspect-ratio: 1440 / 566.125;
 	}
 	.overview-footer-art {

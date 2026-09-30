@@ -75,7 +75,7 @@
 		font-size: 18px;
 		line-height: 22px;
 		min-height: calc(100svh - 64px);
-		padding: 12px 38px 200px;
+		padding: 12px var(--margin) 200px;
 	}
 	.expand-all {
 		display: flex;
@@ -139,7 +139,7 @@
 	}
 	@media (orientation: landscape) {
 		.tablet-index {
-			padding-inline: 43px;
+			padding-inline: var(--margin);
 		}
 		.columns {
 			grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -169,7 +169,7 @@
 		.tablet-index {
 			font-size: 10px;
 			line-height: 12px;
-			padding: 10px 22px 40px;
+			padding: 10px var(--margin) 40px;
 		}
 		.expand-all {
 			min-height: 12px;
@@ -222,10 +222,10 @@
 	}
 	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
 		.tablet-index {
-			width: calc((100% - 22px) * 515 / 830 + 22px);
+			width: calc((100% - 2 * var(--margin)) * 515 / 830 + 2 * var(--margin));
 			min-width: min(100%, 360px);
 			min-height: calc(100svh - 47px);
-			padding-inline: 11px;
+			padding-inline: var(--margin);
 		}
 		.columns {
 			grid-template-columns: minmax(0, 200fr) minmax(0, 200fr) minmax(0, 95fr);

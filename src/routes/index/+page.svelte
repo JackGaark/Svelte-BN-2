@@ -46,10 +46,15 @@
 		previewWidth = format.width * scale;
 		previewHeight = format.height * scale;
 		const lowerEdge = Math.min(list.getBoundingClientRect().bottom, window.innerHeight - 20);
-		const below = rowRect.top + 3;
-		const top = below + previewHeight <= lowerEdge ? below : rowRect.top + 20 - previewHeight;
 		const firstProjectTop = firstRow.getBoundingClientRect().top + 3;
-		previewTop = Math.max(firstProjectTop - railRect.top, top - railRect.top, 0);
+		const topAligned = rowRect.top + 3;
+		const bottomAligned = rowRect.top + 20 - previewHeight;
+		// Keep a corner attached to this row instead of clamping between rows.
+		// If bottom alignment crosses the first project, allow overflow below instead.
+		const top = topAligned + previewHeight > lowerEdge && bottomAligned >= firstProjectTop
+			? bottomAligned
+			: topAligned;
+		previewTop = top - railRect.top;
 	}
 	function selectProject(index: number) {
 		active = index;
@@ -143,7 +148,7 @@
 			display: block;
 		}
 		.index-shell :global(.site-header) {
-			margin-inline: 38px;
+			margin-inline: var(--margin);
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 			gap: 10px;
 			padding-top: 9px;
@@ -164,7 +169,7 @@
 		}
 		@media (orientation: landscape) {
 			.index-shell :global(.site-header) {
-				margin-inline: 45px;
+				margin-inline: var(--margin);
 				grid-template-columns: repeat(8, minmax(0, 1fr));
 				padding-top: 8px;
 			}
@@ -193,7 +198,6 @@
 		width: var(--preview-width);
 		height: var(--preview-height);
 		transform: translateY(var(--preview-top));
-		transition: transform 180ms ease-out;
 		pointer-events: none;
 	}
 	.index-preview img {
@@ -234,7 +238,7 @@
 			display: block;
 		}
 		.index-shell :global(.site-header) {
-			margin-inline: 22px;
+			margin-inline: var(--margin);
 			grid-template-columns: repeat(4, minmax(0, 1fr));
 			gap: 10px;
 			padding-top: 23px;
@@ -279,7 +283,7 @@
 		}
 		.index-shell :global(.site-header) {
 			height: 47px;
-			margin-inline: 11px;
+			margin-inline: var(--margin);
 			padding-top: 23px;
 			grid-template-columns: minmax(0, 305fr) 45px 77px 60px minmax(0, 303fr);
 			gap: 10px;

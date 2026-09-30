@@ -5,6 +5,7 @@
 	let track: HTMLDivElement;
 	let gallery: HTMLElement;
 	let menu = $state(false);
+	let autoplayPaused = $state(false);
 	let {
 		embedded = false,
 		active = true,
@@ -55,6 +56,15 @@
 		}
 	];
 	const current = $derived(slides[slide]);
+	$effect(() => {
+		if (!embedded || !active || autoplayPaused) return;
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const timer = setInterval(() => {
+			if (document.hidden || reducedMotion.matches || menu) return;
+			showSlide((slide + 1) % slides.length);
+		}, 2800);
+		return () => clearInterval(timer);
+	});
 	onMount(() => {
 		if (!embedded) return;
 		let lastAdvance = 0;
@@ -84,19 +94,26 @@
 	function updateSlide() {
 		if (!track.clientWidth) return;
 		// Elastic scrolling can briefly report an offset outside the track.
-		slide = Math.max(
+		const next = Math.max(
 			0,
 			Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth))
 		);
+		if (next !== slide) autoplayPaused = true;
+		slide = next;
 	}
 	function advance(n: number) {
+		autoplayPaused = true;
 		const next = embedded
 			? Math.max(0, Math.min(slides.length - 1, slide + n))
 			: (slide + n + slides.length) % slides.length;
-		const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+		showSlide(next);
+	}
+	function showSlide(index: number) {
+		if (!track) return;
+		slide = index;
 		track.scrollTo({
-			left: next * track.clientWidth,
-			behavior
+			left: index * track.clientWidth,
+			behavior: 'instant'
 		});
 	}
 	function key(e: KeyboardEvent) {
@@ -179,6 +196,12 @@
 		></button>
 		<div class="feature-caption" aria-live="polite">
 			<span>{current.number}</span><a href={`/projet/grande-allee-${slide + 1}`}>{current.title}</a>
+			{#if embedded}
+				<button
+					onclick={() => (autoplayPaused = !autoplayPaused)}
+					aria-label={autoplayPaused ? 'Reprendre le diaporama' : 'Mettre le diaporama en pause'}
+				>{autoplayPaused ? 'Reprendre' : 'Pause'}</button>
+			{/if}
 		</div>
 	</section>
 </div>

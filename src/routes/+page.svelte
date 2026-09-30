@@ -3,6 +3,7 @@
 	import Featured from '$lib/Featured.svelte';
 	let landing: HTMLElement;
 	let galleryOpen = $state(false);
+	let galleryReady = $state(false);
 	let galleryPanel: HTMLDivElement;
 	let openingTimer: ReturnType<typeof setTimeout> | undefined;
 	let suppressOpen = false;
@@ -17,13 +18,22 @@
 		previousOverflow = document.documentElement.style.overflow;
 		document.documentElement.style.overflow = 'hidden';
 		galleryOpen = true;
-		requestAnimationFrame(() => galleryPanel.focus({ preventScroll: true }));
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			galleryReady = true;
+			requestAnimationFrame(() => galleryPanel.focus({ preventScroll: true }));
+		}
+	}
+	function finishReveal(event: TransitionEvent) {
+		if (event.target !== landing || event.propertyName !== 'transform' || !galleryOpen) return;
+		galleryReady = true;
+		galleryPanel.focus({ preventScroll: true });
 	}
 	function closeGallery(event?: MouseEvent) {
 		event?.preventDefault();
 		clearTimeout(openingTimer);
 		openingTimer = undefined;
 		suppressOpen = true;
+		galleryReady = false;
 		galleryOpen = false;
 		document.documentElement.style.overflow = previousOverflow;
 		requestAnimationFrame(() => landing.querySelector('a')?.focus({ preventScroll: true }));
@@ -38,8 +48,8 @@
 				return;
 			}
 			if (galleryOpen || suppressOpen || openingTimer !== undefined) return;
-			// Let the page visibly settle at its physical end before the overlay rises.
-			openingTimer = setTimeout(() => openGallery(), 220);
+			// Hold the wordmark at the end of the scroll before lifting the intro.
+			openingTimer = setTimeout(() => openGallery(), 900);
 		};
 		const wheelAtEnd = (event: WheelEvent) => {
 			if (event.deltaY > 0) checkEnd();
@@ -64,11 +74,12 @@
 		if (galleryOpen && event.key === 'Escape') closeGallery();
 	}}
 />
-<main id="main" class="landing-experience">
+<main id="main" class="landing-experience" class:gallery-open={galleryOpen}>
 	<section
 		bind:this={landing}
 		inert={galleryOpen}
 		class="landing"
+		ontransitionend={finishReveal}
 		aria-label="Nous sommes Bureau Normal"
 		data-node-id="2802:307"
 	>
@@ -92,9 +103,9 @@
 		tabindex="-1"
 		class="landing-gallery"
 		class:is-open={galleryOpen}
-		inert={!galleryOpen}
-		aria-hidden={!galleryOpen}
+		inert={!galleryReady}
+		aria-hidden={!galleryReady}
 	>
-		<Featured embedded active={galleryOpen} onHome={closeGallery} />
+		<Featured embedded active={galleryReady} onHome={closeGallery} />
 	</div>
 </main>

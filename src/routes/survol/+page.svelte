@@ -2,10 +2,14 @@
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import tiles from '$lib/tiles.json';
-	import { projects, studioAddress } from '$lib/data';
-	let hoveredProject = $state<string | null>(null);
-	let focusedProject = $state<string | null>(null);
-	const activeProject = $derived(hoveredProject ?? focusedProject);
+	import { projects } from '$lib/data';
+	let activeProject = $state<string | null>(null);
+	function revealProject(event: MouseEvent, slug: string) {
+		if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+		if (activeProject === slug) return;
+		event.preventDefault();
+		activeProject = slug;
+	}
 	const groupSize = 5;
 	const overviewTiles = tiles.map((tile, index) => {
 		const groupIndex = Math.floor(index / groupSize);
@@ -20,6 +24,7 @@
 </script>
 
 <svelte:head><title>Survol — Bureau Normal</title></svelte:head>
+<svelte:window onkeydown={(event) => { if (event.key === 'Escape') activeProject = null; }} />
 <Header />
 <div class="overview-container">
 	<main id="main" class="overview" data-node-id="770:10208" aria-label="Survol des projets">
@@ -30,16 +35,8 @@
 				style:--highlight-delay={`${(tile.number - 1) * 85}ms`}
 				data-project={tile.project.slug}
 				href={`/projet/${tile.project.slug}`}
-				onpointerenter={() => (hoveredProject = tile.project.slug)}
-				onpointerleave={() => (hoveredProject = null)}
-				onfocus={() => {
-					hoveredProject = null;
-					focusedProject = tile.project.slug;
-				}}
-				onblur={() => (focusedProject = null)}
-				onpointerdown={() => (hoveredProject = tile.project.slug)}
-				onclick={() => (focusedProject = tile.project.slug)}
-				aria-label={`Projet ${tile.projectNumber} — ${tile.project.title}, image ${tile.number} sur ${tile.total} — ouvrir la première diapositive`}
+				onclick={(event) => revealProject(event, tile.project.slug)}
+				aria-label={`Projet ${tile.projectNumber} — ${tile.project.title}, image ${tile.number} sur ${tile.total} — ${activeProject === tile.project.slug ? 'ouvrir la première diapositive' : 'afficher le nom du projet'}`}
 				data-node-id={tile.node}
 			>
 				<img
@@ -50,18 +47,12 @@
 					alt=""
 					loading={i < 16 ? 'eager' : 'lazy'}
 				/>
-				{#if i === 0}
-					<span class="studio-address"
-						><span>{studioAddress.street}<br />{studioAddress.city}</span></span
+				<span class="tile-project" aria-hidden="true">
+					<span>{tile.project.title}</span>
+					<span class="tile-number"
+						>{String(tile.number).padStart(2, '0')}/{String(tile.total).padStart(2, '0')}</span
 					>
-				{:else}
-					<span class="tile-project" aria-hidden="true">
-						<span>{tile.project.title}</span>
-						<span class="tile-number"
-							>{String(tile.number).padStart(2, '0')}/{String(tile.total).padStart(2, '0')}</span
-						>
-					</span>
-				{/if}
+				</span>
 			</a>
 		{/each}
 	</main>
@@ -76,22 +67,7 @@
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 3px;
-		margin-inline: 3px;
-	}
-	.studio-address {
-		position: absolute;
-		inset: 0;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 6px;
-		text-align: center;
-		font-size: clamp(10px, 1.1cqw, 17px);
-		line-height: 1.15;
-		color: var(--paper);
-		text-shadow: 0 1px 3px #222;
-		pointer-events: none;
+		margin-inline: var(--margin);
 	}
 	/* Both dimensions must clear the phone range, including rotated phones. */
 	@media (min-width: 600px) and (min-height: 600px) {

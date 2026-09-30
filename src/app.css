@@ -141,7 +141,7 @@ a:hover {
 .landing {
 	position: relative;
 	aspect-ratio: 1440/4369;
-	padding: 4.861111vw;
+	padding: 4.861111vw var(--margin);
 	color: #222;
 }
 .landing h1 {
@@ -156,8 +156,8 @@ a:hover {
 	display: block;
 	position: absolute;
 	top: 36.14%;
-	left: 4.861111%;
-	right: 4.861111%;
+	left: var(--margin);
+	right: var(--margin);
 	bottom: 1.6%;
 }
 .landing-mark img {
@@ -184,8 +184,8 @@ a:hover {
 }
 .feature-caption {
 	position: absolute;
-	left: 20px;
-	right: 20px;
+	left: var(--margin);
+	right: var(--margin);
 	bottom: 47px;
 	display: grid;
 	grid-template-columns: 80px 1fr auto;
@@ -549,15 +549,15 @@ a:hover {
 	.landing {
 		min-height: 180svh;
 		aspect-ratio: auto;
-		padding: 24px 16px;
+		padding: 24px var(--margin);
 	}
 	.landing h1 {
 		font-size: 28px;
 		line-height: 30px;
 	}
 	.landing-mark {
-		left: 16px;
-		right: 16px;
+		left: var(--margin);
+		right: var(--margin);
 		top: auto;
 		bottom: 24px;
 	}
@@ -565,8 +565,8 @@ a:hover {
 		min-height: 500px;
 	}
 	.feature-caption {
-		left: 16px;
-		right: 16px;
+		left: var(--margin);
+		right: var(--margin);
 		bottom: 24px;
 		grid-template-columns: 44px 1fr auto;
 	}
@@ -785,13 +785,13 @@ a:hover {
 }
 .feature-logo {
 	position: absolute;
-	left: 20px;
+	left: var(--margin);
 	top: 20px;
 	z-index: 10;
 }
 .feature-menu {
 	position: absolute;
-	right: 20px;
+	right: var(--margin);
 	top: 20px;
 	z-index: 11;
 	min-width: 18px;
@@ -838,11 +838,11 @@ a:hover {
 }
 @media (max-width: 599px) {
 	.feature-logo {
-		left: 16px;
+		left: var(--margin);
 		top: 16px;
 	}
 	.feature-menu {
-		right: 12px;
+		right: var(--margin);
 		top: 57px;
 	}
 	.feature-photo.inset-photo {
@@ -899,30 +899,39 @@ a:hover {
 	}
 }
 
-/* The document ends at the wordmark; the gallery enters as a fixed overlay. */
+/* Lift the end of the long intro to reveal the stationary gallery underneath. */
+.landing-experience .landing {
+	z-index: 21;
+	background: var(--paper);
+	transform: translate3d(0, 0, 0);
+	transition: transform 600ms cubic-bezier(0.7, 0, 0.3, 1);
+}
+.landing-experience.gallery-open .landing {
+	transform: translate3d(0, -100dvh, 0);
+	transition-duration: 1100ms;
+	transition-delay: 300ms;
+}
 .landing-gallery {
 	position: fixed;
 	inset: 0;
 	z-index: 20;
 	background: var(--paper);
-	transform: translate3d(0, 100%, 0);
 	visibility: hidden;
-	will-change: transform;
-	transition:
-		transform 1100ms cubic-bezier(0.65, 0, 0.35, 1),
-		visibility 0s linear 1100ms;
+	transition: visibility 0s linear 600ms;
 	overscroll-behavior: contain;
 }
 .landing-gallery.is-open {
-	transform: translate3d(0, 0, 0);
 	visibility: visible;
 	transition-delay: 0s;
 }
-/* Keep the explicitly requested reveal, shortened for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
+	.landing-experience .landing,
+	.landing-experience.gallery-open .landing {
+		transition-duration: 1ms;
+		transition-delay: 0s;
+	}
 	.landing-gallery {
-		transition-duration: 650ms, 0s;
-		transition-delay: 0s, 650ms;
+		transition-delay: 1ms;
 	}
 	.landing-gallery.is-open {
 		transition-delay: 0s;
@@ -998,4 +1007,19 @@ html {
 		text-box-trim: trim-both;
 		text-box-edge: cap alphabetic;
 	}
+}
+
+/* Shared outer margins, based on the INDEX layouts. */
+@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px),
+	(min-width: 1200px) and (max-width: 1366px) and (min-height: 600px) and (pointer: coarse) {
+	:root { --margin: 38px; }
+	@media (orientation: landscape) {
+		:root { --margin: 45px; }
+	}
+}
+@media (max-width: 599px) {
+	:root { --margin: 22px; }
+}
+@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+	:root { --margin: 11px; }
 }
