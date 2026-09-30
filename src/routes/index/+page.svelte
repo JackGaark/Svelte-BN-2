@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
+	import IndexAccordion from '$lib/IndexAccordion.svelte';
 	import { projects } from '$lib/data';
 	const previewFormats = [
 		{ width: 520, height: 370 },
@@ -60,48 +61,115 @@
 </script>
 
 <svelte:head><title>Index — Bureau Normal</title></svelte:head>
-<Header />
-<main id="main" class="index-page design-grid" data-node-id="2927:2132">
-	<div class="index-preview-rail" bind:this={rail}>
-		<div
-			class="index-preview"
-			style:--preview-top={`${previewTop}px`}
-			style:--preview-height={`${previewHeight}px`}
-			style:--preview-width={`${previewWidth}px`}
-		>
-			<img
-				bind:this={preview}
-				onload={positionPreview}
-				src={projects[active].image}
-				alt={projects[active].title}
-			/>
+<div class="index-shell">
+	<Header />
+	<main id="main">
+		<div class="index-page design-grid" data-node-id="2927:2132">
+			<div class="index-preview-rail" bind:this={rail}>
+				<div
+					class="index-preview"
+					style:--preview-top={`${previewTop}px`}
+					style:--preview-height={`${previewHeight}px`}
+					style:--preview-width={`${previewWidth}px`}
+				>
+					<img
+						bind:this={preview}
+						onload={positionPreview}
+						src={projects[active].image}
+						alt={projects[active].title}
+					/>
+				</div>
+			</div>
+			<div bind:this={list} class="project-list" role="table" aria-label="Index des projets">
+				<div class="list-heading list-grid" role="row">
+					<span role="columnheader">Projet</span><span role="columnheader">Type</span><span
+						role="columnheader">Status</span
+					><span role="columnheader">Dates</span>
+				</div>
+				{#each projects as project, i}
+					<a
+						class="list-row list-grid"
+						class:selected={active === i}
+						href={`/projet/${project.slug}`}
+						onmouseenter={() => selectProject(i)}
+						onfocus={() => selectProject(i)}
+						role="row"
+					>
+						<span role="cell">{project.title}</span><span role="cell">{project.type}</span><span
+							role="cell">{project.status}</span
+						><span role="cell" class="dates">{project.start}<span>à</span>{project.end}</span>
+					</a>
+				{/each}
+			</div>
 		</div>
-	</div>
-	<div bind:this={list} class="project-list" role="table" aria-label="Index des projets">
-		<div class="list-heading list-grid" role="row">
-			<span role="columnheader">Projet</span><span role="columnheader">Type</span><span
-				role="columnheader">Status</span
-			><span role="columnheader">Dates</span>
-		</div>
-		{#each projects as project, i}
-			<a
-				class="list-row list-grid"
-				class:selected={active === i}
-				href={`/projet/${project.slug}`}
-				onmouseenter={() => selectProject(i)}
-				onfocus={() => selectProject(i)}
-				role="row"
-			>
-				<span role="cell">{project.title}</span><span role="cell">{project.type}</span><span
-					role="cell">{project.status}</span
-				><span role="cell" class="dates">{project.start}<span>à</span>{project.end}</span>
-			</a>
-		{/each}
-	</div>
-</main>
-<OverviewFooter />
+		<div class="tablet-view"><IndexAccordion /></div>
+	</main>
+	<OverviewFooter />
+</div>
 
 <style>
+	.tablet-view {
+		display: none;
+	}
+	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px),
+		(min-width: 1200px) and (max-width: 1366px) and (min-height: 600px) and (pointer: coarse) {
+		.index-shell {
+			background: #333;
+			color: white;
+			min-height: 100svh;
+		}
+		.index-page {
+			display: none;
+		}
+		.tablet-view {
+			display: block;
+		}
+		.index-shell :global(.site-header) {
+			margin-inline: 38px;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			gap: 10px;
+			padding-top: 9px;
+		}
+		.index-shell :global(.nav-link) {
+			font-family: Inter, Arial, sans-serif;
+			font-stretch: normal;
+			font-size: 22px;
+			line-height: 27px;
+			margin-top: 0;
+		}
+		.index-shell :global(.nav-0) {
+			grid-column: 4;
+		}
+		.index-shell :global(.nav-1) {
+			grid-column: 5;
+		}
+		.index-shell :global(.nav-2) {
+			grid-column: 6;
+		}
+		.index-shell :global(.brand img) {
+			filter: brightness(0) invert(1);
+		}
+		.index-shell :global(.overview-footer) {
+			filter: invert(1);
+			color: #222;
+		}
+		@media (orientation: landscape) {
+			.index-shell :global(.site-header) {
+				margin-inline: 45px;
+				grid-template-columns: repeat(8, minmax(0, 1fr));
+				padding-top: 8px;
+			}
+			.index-shell :global(.nav-0) {
+				grid-column: 6;
+			}
+			.index-shell :global(.nav-1) {
+				grid-column: 7;
+			}
+			.index-shell :global(.nav-2) {
+				grid-column: 8;
+			}
+		}
+	}
 	.index-preview-rail {
 		grid-column: 1 / span 3;
 		grid-row: 1;

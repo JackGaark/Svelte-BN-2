@@ -93,12 +93,14 @@
 		text-shadow: 0 1px 3px #222;
 		pointer-events: none;
 	}
-	@container project-grid (min-width: 1023px) {
+	/* Both dimensions must clear the phone range, including rotated phones. */
+	@media (min-width: 600px) and (min-height: 600px) {
 		.overview {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
 	}
-	@container project-grid (min-width: 1200px) {
+	@media (min-width: 600px) and (min-height: 600px) and (orientation: landscape),
+		(min-width: 1200px) {
 		.overview {
 			grid-template-columns: repeat(8, minmax(0, 1fr));
 		}
