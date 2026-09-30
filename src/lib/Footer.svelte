@@ -17,6 +17,28 @@
 </footer>
 
 <style>
+	@media (max-width: 599px) {
+		.with-contacts {
+			grid-template-columns: minmax(0, 1fr) max-content;
+			column-gap: 16px;
+			align-items: baseline;
+		}
+		.with-contacts .footer-email {
+			grid-column: 1;
+			grid-row: 1;
+			white-space: nowrap;
+		}
+		.with-contacts .footer-social {
+			grid-column: 2;
+			grid-row: 1;
+			white-space: nowrap;
+		}
+		.with-contacts .footer-copyright {
+			grid-column: 2;
+			grid-row: 2;
+			justify-self: end;
+		}
+	}
 	@media (min-width: 600px) and (max-width: 1366px) {
 		.with-contacts {
 			grid-template-columns: minmax(0, 1fr) repeat(3, max-content);
