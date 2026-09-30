@@ -17,9 +17,7 @@
 		previousOverflow = document.documentElement.style.overflow;
 		document.documentElement.style.overflow = 'hidden';
 		galleryOpen = true;
-		requestAnimationFrame(() =>
-			galleryPanel.querySelector<HTMLAnchorElement>('.brand')?.focus({ preventScroll: true })
-		);
+		requestAnimationFrame(() => galleryPanel.focus({ preventScroll: true }));
 	}
 	function closeGallery(event?: MouseEvent) {
 		event?.preventDefault();
@@ -91,6 +89,7 @@
 	<div
 		bind:this={galleryPanel}
 		id="featured-gallery"
+		tabindex="-1"
 		class="landing-gallery"
 		class:is-open={galleryOpen}
 		inert={!galleryOpen}

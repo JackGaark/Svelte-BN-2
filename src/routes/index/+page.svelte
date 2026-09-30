@@ -114,8 +114,8 @@
 	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px),
 		(min-width: 1200px) and (max-width: 1366px) and (min-height: 600px) and (pointer: coarse) {
 		.index-shell {
-			background: #333;
-			color: white;
+			background: var(--paper);
+			color: var(--ink);
 			min-height: 100svh;
 		}
 		.index-page {
@@ -145,13 +145,6 @@
 		}
 		.index-shell :global(.nav-2) {
 			grid-column: 6;
-		}
-		.index-shell :global(.brand img) {
-			filter: brightness(0) invert(1);
-		}
-		.index-shell :global(.overview-footer) {
-			filter: invert(1);
-			color: #222;
 		}
 		@media (orientation: landscape) {
 			.index-shell :global(.site-header) {

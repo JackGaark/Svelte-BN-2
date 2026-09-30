@@ -55,15 +55,6 @@
 		}
 	];
 	const current = $derived(slides[slide]);
-	$effect(() => {
-		if (!active) return;
-		const timer = window.setInterval(() => {
-			if (document.hidden || !track || (embedded && gallery.getBoundingClientRect().top > 2))
-				return;
-			advance(1, true);
-		}, 2000);
-		return () => window.clearInterval(timer);
-	});
 	onMount(() => {
 		if (!embedded) return;
 		let lastAdvance = 0;
@@ -98,11 +89,10 @@
 			Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth))
 		);
 	}
-	function advance(n: number, autoplay = false) {
-		const next =
-			embedded && !autoplay
-				? Math.max(0, Math.min(slides.length - 1, slide + n))
-				: (slide + n + slides.length) % slides.length;
+	function advance(n: number) {
+		const next = embedded
+			? Math.max(0, Math.min(slides.length - 1, slide + n))
+			: (slide + n + slides.length) % slides.length;
 		const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
 		track.scrollTo({
 			left: next * track.clientWidth,
@@ -144,6 +134,7 @@
 			{#each slides as item, i}
 				<div
 					class="feature-panel"
+					class:warm-background={i === 3}
 					role="group"
 					aria-hidden={i !== slide}
 					aria-label={`${i + 1} / ${slides.length} — ${item.title}`}

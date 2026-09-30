@@ -6,7 +6,7 @@
 	font-display: swap;
 }
 :root {
-	--paper: #edebe9;
+	--paper: var(--OFFWHITE-WARM, #EDEBE9);
 	--ink: #222;
 	--muted: rgba(51, 51, 51, 0.5);
 	--placeholder: rgba(51, 51, 51, 0.2);
@@ -387,6 +387,7 @@ a:hover {
 }
 .project-page {
 	min-height: 100svh;
+	color: #333333;
 }
 .project-view {
 	padding-top: 80px;
@@ -729,9 +730,9 @@ a:hover {
 	visibility: hidden;
 }
 .slide-hit {
-	position: absolute;
+	position: fixed;
 	top: 0;
-	bottom: 136px;
+	bottom: 0;
 	width: 50%;
 	z-index: 2;
 	touch-action: pan-y;
@@ -747,26 +748,39 @@ a:hover {
 	pointer-events: none;
 }
 .previous-cursor {
-	left: calc(6.388889vw - var(--margin));
-	top: calc(74.609375svh - 64px);
+	left: 6.388889vw;
+	top: 74.609375svh;
 }
 .next-cursor {
-	right: calc(9.236111vw - var(--margin) - 21px);
-	top: calc(47.0703125svh - 64px);
+	right: calc(9.236111vw - 21px);
+	top: 47.0703125svh;
 }
 .full-slide .next-cursor {
 	visibility: hidden;
 }
-.full-slide .slide-hit:focus-visible .slide-cursor {
-	visibility: visible;
-}
-.slide-hit[aria-disabled='true'] {
-	cursor: default;
+@media (hover: hover) and (pointer: fine) {
+	.slide-hit {
+		cursor: none;
+	}
+	.slide-hit .slide-cursor {
+		visibility: hidden;
+	}
 }
 .project-caption,
 .project-wayfinding {
 	position: relative;
 	z-index: 3;
+	pointer-events: none;
+}
+.project-page .site-header,
+.project-wayfinding {
+	pointer-events: auto;
+	cursor: default;
+}
+.project-wayfinding a,
+.project-page .site-header a {
+	pointer-events: auto;
+	cursor: pointer;
 }
 .feature-logo {
 	position: absolute;
@@ -790,9 +804,28 @@ a:hover {
 	width: 72.7778%;
 	height: 80.8594%;
 	object-fit: fill;
+	/* Blend the drawing's pale raster background into the slide's warm paper. */
+	filter: grayscale(1) brightness(1.04);
+	mix-blend-mode: multiply;
 }
 .dark-ink {
 	color: #333;
+}
+.home-feature .site-header {
+	color: rgba(230, 230, 230, 0.9);
+}
+.home-feature .brand img,
+.home-feature .feature-logo img {
+	filter: brightness(0) invert(0.901961);
+	opacity: 0.9;
+}
+.home-feature.dark-ink .site-header {
+	color: #333333;
+}
+.home-feature.dark-ink .brand img,
+.home-feature.dark-ink .feature-logo img {
+	filter: brightness(0) invert(0.2);
+	opacity: 1;
 }
 @keyframes photo-reveal {
 	from {
@@ -810,9 +843,6 @@ a:hover {
 	.feature-menu {
 		right: 12px;
 		top: 57px;
-	}
-	.slide-hit {
-		bottom: 120px;
 	}
 	.feature-photo.inset-photo {
 		inset: 20% 4% auto;
@@ -919,6 +949,7 @@ html {
 	display: none;
 }
 .feature-panel {
+	isolation: isolate;
 	position: relative;
 	flex: 0 0 100%;
 	height: 100%;
@@ -926,6 +957,9 @@ html {
 	scroll-snap-align: start;
 	scroll-snap-stop: always;
 	background: var(--paper);
+}
+.feature-panel.warm-background {
+	background: #EDEBE9;
 }
 .feature-panel .feature-photo {
 	animation: none;

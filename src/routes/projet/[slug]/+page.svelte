@@ -3,6 +3,28 @@
 	let { data } = $props();
 	let slide = $state(0);
 	let touchStart = 0;
+	let pointer = $state<{ direction: number; x: number; y: number } | null>(null);
+	function followPointer(event: PointerEvent, direction: number) {
+		if (event.pointerType !== 'mouse') return;
+		const bounds =
+			event.currentTarget instanceof HTMLElement
+				? event.currentTarget.getBoundingClientRect()
+				: null;
+		if (bounds)
+			pointer = {
+				direction,
+				x: event.clientX - bounds.left - 10.5,
+				y: Math.max(
+					0,
+					Math.min(bounds.height - 12, event.clientY - bounds.top - 6 + (direction === -1 ? 64 : -32))
+				)
+			};
+	}
+	function arrowPosition(direction: number) {
+		return pointer?.direction === direction
+			? `left: ${pointer.x}px; top: ${pointer.y}px; right: auto; visibility: visible;`
+			: undefined;
+	}
 	function advance(direction: number) {
 		slide = Math.max(0, Math.min(3, slide + direction));
 	}
@@ -57,11 +79,14 @@
 			class="slide-hit previous-hit"
 			aria-disabled={slide === 0}
 			onclick={() => advance(-1)}
+			onpointermove={(event) => followPointer(event, -1)}
+			onpointerleave={() => (pointer = null)}
 			ontouchstart={(e) => (touchStart = e.touches[0].clientX)}
 			ontouchend={touchEnd}
 			aria-label="Image précédente"
 			><img
 				class="slide-cursor previous-cursor"
+				style={arrowPosition(-1)}
 				src="/assets/2973-503-imgPrevious.svg"
 				alt=""
 			/></button
@@ -70,10 +95,17 @@
 			class="slide-hit next-hit"
 			aria-disabled={slide === 3}
 			onclick={() => advance(1)}
+			onpointermove={(event) => followPointer(event, 1)}
+			onpointerleave={() => (pointer = null)}
 			ontouchstart={(e) => (touchStart = e.touches[0].clientX)}
 			ontouchend={touchEnd}
 			aria-label="Image suivante"
-			><img class="slide-cursor next-cursor" src="/assets/2973-503-imgNext.svg" alt="" /></button
+			><img
+				class="slide-cursor next-cursor"
+				style={arrowPosition(1)}
+				src="/assets/2973-503-imgNext.svg"
+				alt=""
+			/></button
 		>
 		<div class="project-caption" aria-live="polite">
 			<span>{String(slide + 1).padStart(2, '0')}/04</span><span>{data.project.title}</span><span
