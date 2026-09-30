@@ -988,8 +988,8 @@ html {
 	(max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
 	.site-header.page-navigation .nav-link {
 		color: var(--222222, #222);
-		font-family: Greed, 'Arial Narrow', sans-serif;
-		font-stretch: normal;
+		font-family: inherit;
+		font-stretch: inherit;
 		font-size: 14px;
 		font-style: normal;
 		font-weight: 400;

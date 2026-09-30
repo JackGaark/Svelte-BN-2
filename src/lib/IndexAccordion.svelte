@@ -72,8 +72,6 @@
 	}
 
 	.tablet-index {
-		font-family: Inter, Arial, sans-serif;
-		font-stretch: normal;
 		font-size: 18px;
 		line-height: 22px;
 		min-height: calc(100svh - 64px);

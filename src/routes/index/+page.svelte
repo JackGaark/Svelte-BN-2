@@ -149,8 +149,6 @@
 			padding-top: 9px;
 		}
 		.index-shell :global(.nav-link) {
-			font-family: Inter, Arial, sans-serif;
-			font-stretch: normal;
 			font-size: 22px;
 			line-height: 27px;
 			margin-top: 0;
