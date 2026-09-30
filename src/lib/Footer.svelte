@@ -19,8 +19,8 @@
 <style>
 	@media (max-width: 599px) {
 		.with-contacts {
-			grid-template-columns: minmax(0, 1fr) max-content;
-			column-gap: 16px;
+			grid-template-columns: minmax(0, 1fr) max-content max-content;
+			column-gap: clamp(8px, 2.5vw, 16px);
 			align-items: baseline;
 		}
 		.with-contacts .footer-email {
@@ -34,9 +34,10 @@
 			white-space: nowrap;
 		}
 		.with-contacts .footer-copyright {
-			grid-column: 2;
-			grid-row: 2;
+			grid-column: 3;
+			grid-row: 1;
 			justify-self: end;
+			white-space: nowrap;
 		}
 	}
 	@media (min-width: 600px) and (max-width: 1366px) {
