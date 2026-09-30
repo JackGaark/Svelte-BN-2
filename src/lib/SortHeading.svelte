@@ -12,7 +12,12 @@
 	{onclick}
 	aria-label={`${label} : trier par ordre ${direction === 'ascending' ? 'décroissant' : 'croissant'}`}
 >
-	{label}<span class:inactive={direction === null} aria-hidden="true">{direction === 'descending' ? '↓' : '↑'}</span>
+	{label}<img
+		class:inactive={direction === null}
+		src={direction === 'descending' ? '/assets/sort-arrow-down.svg' : '/assets/sort-arrow-up.svg'}
+		alt=""
+		aria-hidden="true"
+	/>
 </button>
 
 <style>
@@ -20,10 +25,10 @@
 		text-align: left;
 		text-transform: inherit;
 	}
-	span {
+	img {
 		display: inline-block;
 		margin-left: 0.25em;
-		font-size: 0.8em;
+		vertical-align: baseline;
 	}
 	.inactive {
 		opacity: 0.4;
