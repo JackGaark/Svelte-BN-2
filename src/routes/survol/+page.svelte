@@ -74,7 +74,7 @@
 	}
 	.overview {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 3px;
 		margin-inline: 3px;
 	}
@@ -93,27 +93,12 @@
 		text-shadow: 0 1px 3px #222;
 		pointer-events: none;
 	}
-	@container project-grid (min-width: 575px) {
-		.overview {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
-	}
-	@container project-grid (min-width: 798px) {
-		.overview {
-			grid-template-columns: repeat(5, minmax(0, 1fr));
-		}
-	}
 	@container project-grid (min-width: 1023px) {
 		.overview {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
 		}
 	}
 	@container project-grid (min-width: 1200px) {
-		.overview {
-			grid-template-columns: repeat(7, minmax(0, 1fr));
-		}
-	}
-	@container project-grid (min-width: 1691px) {
 		.overview {
 			grid-template-columns: repeat(8, minmax(0, 1fr));
 		}
