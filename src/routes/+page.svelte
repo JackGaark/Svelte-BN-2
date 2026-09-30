@@ -74,7 +74,7 @@
 		if (galleryOpen && event.key === 'Escape') closeGallery();
 	}}
 />
-<main id="main" class="landing-experience" class:gallery-open={galleryOpen}>
+<main id="main" class="landing-experience" class:gallery-open={galleryOpen} class:gallery-ready={galleryReady}>
 	<section
 		bind:this={landing}
 		inert={galleryOpen}

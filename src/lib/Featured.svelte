@@ -196,12 +196,6 @@
 		></button>
 		<div class="feature-caption" aria-live="polite">
 			<span>{current.number}</span><a href={`/projet/grande-allee-${slide + 1}`}>{current.title}</a>
-			{#if embedded}
-				<button
-					onclick={() => (autoplayPaused = !autoplayPaused)}
-					aria-label={autoplayPaused ? 'Reprendre le diaporama' : 'Mettre le diaporama en pause'}
-				>{autoplayPaused ? 'Reprendre' : 'Pause'}</button>
-			{/if}
 		</div>
 	</section>
 </div>
