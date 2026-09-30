@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	let { light = false, onHome }: { light?: boolean; onHome?: (event: MouseEvent) => void } =
+	let { light = false, mobileLight = false, onHome }: { light?: boolean; mobileLight?: boolean; onHome?: (event: MouseEvent) => void } =
 		$props();
 </script>
 
@@ -10,10 +10,14 @@
 		href="/"
 		onclick={onHome}
 		aria-label={onHome ? 'Bureau Normal — Retour à l’introduction' : 'Bureau Normal — Accueil'}
-		><img
+		><picture>
+			{#if mobileLight}
+				<source media="(max-width: 599px)" srcset="/assets/2888-486-imgLogoNav.svg" />
+			{/if}
+			<img
 			src={light ? '/assets/2888-486-imgLogoNav.svg' : '/assets/2973-503-imgLogoNav.svg'}
 			alt="Bureau Normal"
-		/></a
+		/></picture></a
 	>
 	{#each [{ href: '/index', label: 'Index' }, { href: '/survol', label: 'Survol' }, { href: '/bureau', label: 'Bureau' }] as link, i}
 		<a

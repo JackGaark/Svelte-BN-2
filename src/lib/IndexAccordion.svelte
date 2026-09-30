@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { projects } from './data';
+	import type { projects as projectData } from './data';
+	import SortHeading from './SortHeading.svelte';
+	import { sortColumns, type SortKey, type SortDirection } from './projectSort';
+	let { projects, sortKey, sortDirection, onchangeSort }: {
+		projects: typeof projectData;
+		sortKey: SortKey | null;
+		sortDirection: SortDirection;
+		onchangeSort: (key: SortKey) => void;
+	} = $props();
 	let expanded = $state<string[]>([]);
 	const allExpanded = $derived(expanded.length === projects.length);
 	function toggle(slug: string) {
@@ -23,10 +31,14 @@
 			>{allExpanded ? '⌃' : '⌄'}</span
 		>
 	</button>
-	<div class="columns headings" aria-hidden="true">
-		<span>Projet</span><span>Type</span><span class="project-status">Status</span><span>Dates</span>
+	<div class="columns headings">
+		{#each sortColumns as column}
+			<span class:project-status={column.key === 'status'}>
+				<SortHeading label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => onchangeSort(column.key)} />
+			</span>
+		{/each}
 	</div>
-	{#each projects as project}
+	{#each projects as project (project.slug)}
 		{@const open = expanded.includes(project.slug)}
 		<article class:expanded={open}>
 			<div id={`preview-${project.slug}`} class="project-image" hidden={!open}>
@@ -44,11 +56,17 @@
 					>{project.status}</span
 				><span class="project-dates">{project.start} <span>à</span> {project.end}</span>
 			</button>
+			{#if open}
+				<div class="mobile-divider" aria-hidden="true"></div>
+			{/if}
 		</article>
 	{/each}
 </section>
 
 <style>
+	.mobile-divider {
+		display: none;
+	}
 	.project-status {
 		display: none;
 	}
@@ -146,6 +164,60 @@
 		.expanded .project-toggle {
 			min-height: 60px;
 			padding-top: 16px;
+		}
+	}
+	@media (max-width: 599px) {
+		.tablet-index {
+			font-size: 10px;
+			line-height: 12px;
+			padding: 10px 22px 40px;
+		}
+		.expand-all {
+			min-height: 12px;
+			gap: 10px;
+			margin-bottom: 11px;
+			text-transform: uppercase;
+		}
+		.expand-all span {
+			font-size: 12px;
+		}
+		.columns {
+			grid-template-columns: minmax(0, 170fr) minmax(0, 80fr) minmax(0, 79fr);
+			gap: 10px;
+		}
+		.project-status {
+			display: none;
+		}
+		.headings,
+		.first-expanded .headings {
+			margin-bottom: 4px;
+		}
+		.project-toggle {
+			min-height: 19px;
+			padding: 3px 0 4px;
+		}
+		.project-dates {
+			gap: 3px;
+			white-space: nowrap;
+		}
+		.project-image {
+			width: 100%;
+		}
+		.project-image img {
+			aspect-ratio: 349.509 / 226.959;
+		}
+		.expanded {
+			margin-bottom: 13px;
+			border-bottom: 0;
+		}
+		.expanded .project-toggle {
+			min-height: 20px;
+			padding: 4px 0;
+		}
+		.mobile-divider {
+			display: block;
+			height: 1px;
+			background: url('/assets/mobile-index-divider.svg') left center / 100% 1px no-repeat;
 		}
 	}
 </style>

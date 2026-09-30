@@ -1,9 +1,22 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import IndexAccordion from '$lib/IndexAccordion.svelte';
 	import { projects } from '$lib/data';
+	import SortHeading from '$lib/SortHeading.svelte';
+	import { sortColumns, sortProjects, type SortKey, type SortDirection } from '$lib/projectSort';
+	let sortKey = $state<SortKey | null>('dates');
+	let sortDirection = $state<SortDirection>('descending');
+	let sortedProjects = $derived(sortProjects(projects, sortKey, sortDirection));
+	async function changeSort(key: SortKey) {
+		const selectedSlug = sortedProjects[active].slug;
+		sortDirection = sortKey === key && sortDirection === 'ascending' ? 'descending' : 'ascending';
+		sortKey = key;
+		active = sortedProjects.findIndex((project) => project.slug === selectedSlug);
+		await tick();
+		positionPreview();
+	}
 	const previewFormats = [
 		{ width: 520, height: 370 },
 		{ width: 368, height: 520 },
@@ -19,8 +32,10 @@
 
 	function positionPreview() {
 		if (!rail || !list || !preview) return;
-		const row = list.querySelectorAll<HTMLElement>('.list-row')[active];
-		if (!row) return;
+		const rows = list.querySelectorAll<HTMLElement>('.list-row');
+		const row = rows[active];
+		const firstRow = rows[0];
+		if (!row || !firstRow) return;
 		const railRect = rail.getBoundingClientRect();
 		const rowRect = row.getBoundingClientRect();
 		const format = previewFormats[active % previewFormats.length];
@@ -33,7 +48,8 @@
 		const lowerEdge = Math.min(list.getBoundingClientRect().bottom, window.innerHeight - 20);
 		const below = rowRect.top + 3;
 		const top = below + previewHeight <= lowerEdge ? below : rowRect.top + 20 - previewHeight;
-		previewTop = Math.max(0, top - railRect.top);
+		const firstProjectTop = firstRow.getBoundingClientRect().top + 3;
+		previewTop = Math.max(firstProjectTop - railRect.top, top - railRect.top, 0);
 	}
 	function selectProject(index: number) {
 		active = index;
@@ -62,7 +78,7 @@
 
 <svelte:head><title>Index — Bureau Normal</title></svelte:head>
 <div class="index-shell">
-	<Header />
+	<Header mobileLight />
 	<main id="main">
 		<div class="index-page design-grid" data-node-id="2927:2132">
 			<div class="index-preview-rail" bind:this={rail}>
@@ -75,18 +91,20 @@
 					<img
 						bind:this={preview}
 						onload={positionPreview}
-						src={projects[active].image}
-						alt={projects[active].title}
+						src={sortedProjects[active].image}
+						alt={sortedProjects[active].title}
 					/>
 				</div>
 			</div>
 			<div bind:this={list} class="project-list" role="table" aria-label="Index des projets">
 				<div class="list-heading list-grid" role="row">
-					<span role="columnheader">Projet</span><span role="columnheader">Type</span><span
-						role="columnheader">Status</span
-					><span role="columnheader">Dates</span>
+					{#each sortColumns as column}
+						<span role="columnheader" aria-sort={sortKey === column.key ? sortDirection : 'none'}>
+							<SortHeading label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => changeSort(column.key)} />
+						</span>
+					{/each}
 				</div>
-				{#each projects as project, i}
+				{#each sortedProjects as project, i (project.slug)}
 					<a
 						class="list-row list-grid"
 						class:selected={active === i}
@@ -102,7 +120,7 @@
 				{/each}
 			</div>
 		</div>
-		<div class="tablet-view"><IndexAccordion /></div>
+		<div class="tablet-view"><IndexAccordion projects={sortedProjects} {sortKey} {sortDirection} onchangeSort={changeSort} /></div>
 	</main>
 	<OverviewFooter />
 </div>
@@ -206,6 +224,36 @@
 		}
 	}
 	@media (max-width: 599px) {
+		.index-shell {
+			background: #333;
+			color: #fff;
+			min-height: 100svh;
+		}
+		.index-page {
+			display: none;
+		}
+		.tablet-view {
+			display: block;
+		}
+		.index-shell :global(.site-header) {
+			margin-inline: 22px;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 10px;
+			padding-top: 23px;
+		}
+		.index-shell :global(.nav-link) {
+			font-family: Inter, Arial, sans-serif;
+			font-stretch: normal;
+			font-size: 14px;
+			line-height: 17px;
+			margin-top: 0;
+		}
+		.index-shell :global(.nav-link.active) {
+			text-underline-offset: 3px;
+		}
+		.index-shell :global(.overview-footer) {
+			display: none;
+		}
 		.index-preview-rail {
 			width: 100%;
 			height: 180px;
