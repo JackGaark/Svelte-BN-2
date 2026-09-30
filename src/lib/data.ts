@@ -13,3 +13,7 @@ export const projects = Array.from({ length: 33 }, (_, i) => ({
 }));
 export const intro =
 	'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut orci ex, pulvinar sit amet rhoncus non, molestie in nulla.';
+export const studioAddress = {
+	street: '1234 Rue de Machin',
+	city: 'Montréal, Qc. H2H 2H2'
+};
