@@ -4,7 +4,11 @@
 		$props();
 </script>
 
-<header class:light class="site-header design-grid">
+<header
+	class:light
+	class:page-navigation={['/index', '/survol', '/bureau'].includes(page.url.pathname)}
+	class="site-header design-grid"
+>
 	<a
 		class="brand"
 		href="/"

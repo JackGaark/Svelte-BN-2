@@ -78,7 +78,7 @@
 
 <svelte:head><title>Index — Bureau Normal</title></svelte:head>
 <div class="index-shell">
-	<Header mobileLight />
+	<Header />
 	<main id="main">
 		<div class="index-page design-grid" data-node-id="2927:2132">
 			<div class="index-preview-rail" bind:this={rail}>
@@ -225,8 +225,8 @@
 	}
 	@media (max-width: 599px) {
 		.index-shell {
-			background: #333;
-			color: #fff;
+			background: var(--paper);
+			color: var(--ink);
 			min-height: 100svh;
 		}
 		.index-page {
@@ -242,10 +242,6 @@
 			padding-top: 23px;
 		}
 		.index-shell :global(.nav-link) {
-			font-family: Inter, Arial, sans-serif;
-			font-stretch: normal;
-			font-size: 14px;
-			line-height: 17px;
 			margin-top: 0;
 		}
 		.index-shell :global(.nav-link.active) {
@@ -269,6 +265,38 @@
 		.list-row.selected::after {
 			top: auto;
 			bottom: 0;
+		}
+	}
+	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.index-shell {
+			background: var(--paper);
+			color: var(--ink);
+			min-height: 100svh;
+		}
+		.index-page {
+			display: none;
+		}
+		.tablet-view {
+			display: block;
+		}
+		.index-shell :global(.site-header) {
+			height: 47px;
+			margin-inline: 11px;
+			padding-top: 23px;
+			grid-template-columns: minmax(0, 305fr) 45px 77px 60px minmax(0, 303fr);
+			gap: 10px;
+		}
+		.index-shell :global(.nav-link) {
+			margin-top: 0;
+		}
+		.index-shell :global(.nav-0) { grid-column: 2; }
+		.index-shell :global(.nav-1) { grid-column: 3; }
+		.index-shell :global(.nav-2) { grid-column: 4; }
+		.index-shell :global(.nav-link.active) {
+			text-underline-offset: 3px;
+		}
+		.index-shell :global(.overview-footer) {
+			display: none;
 		}
 	}
 </style>
