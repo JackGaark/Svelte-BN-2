@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Footer from './Footer.svelte';
+	import BlinkingEye from './BlinkingEye.svelte';
 	let width = $state(1440);
 </script>
 
@@ -24,8 +25,8 @@
 				alt=""
 				data-node-id="2861:500"
 			/>
-			<img class="footer-eye-bottom" src="/assets/overview-footer-eye-bottom.svg" alt="" />
-			<img class="footer-eye-top" src="/assets/overview-footer-eye-top.svg" alt="" />
+			<span class="footer-eye-bottom"><BlinkingEye delay={0.15} /></span>
+			<span class="footer-eye-top"><BlinkingEye /></span>
 		</span>
 	</a>
 	<Footer mark={false} />
@@ -64,12 +65,14 @@
 		top: 42.39px;
 	}
 	.footer-eye-bottom {
+		position: absolute;
 		left: 91.5455px;
-		top: 182.858px;
+		top: 179.93612px;
 	}
 	.footer-eye-top {
+		position: absolute;
 		left: 91.5455px;
-		top: 143.918px;
+		top: 140.99612px;
 	}
 	.overview-footer :global(.site-footer) {
 		margin-top: clamp(16px, 2.2875vw, 32.94px);

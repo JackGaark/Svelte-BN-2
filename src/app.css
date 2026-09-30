@@ -744,16 +744,24 @@ a:hover {
 }
 .slide-cursor {
 	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
 	pointer-events: none;
+}
+.previous-cursor {
+	left: calc(6.388889vw - var(--margin));
+	top: calc(74.609375svh - 64px);
+}
+.next-cursor {
+	right: calc(9.236111vw - var(--margin) - 21px);
+	top: calc(47.0703125svh - 64px);
+}
+.full-slide .next-cursor {
+	visibility: hidden;
+}
+.full-slide .slide-hit:focus-visible .slide-cursor {
+	visibility: visible;
 }
 .slide-hit[aria-disabled='true'] {
 	cursor: default;
-}
-.slide-hit[aria-disabled='true'] .slide-cursor {
-	opacity: 0.3;
 }
 .project-caption,
 .project-wayfinding {
