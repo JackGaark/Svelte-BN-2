@@ -4,7 +4,7 @@
 	let slide = $state(0);
 	let touchStart = 0;
 	function advance(direction: number) {
-		slide = (slide + direction + 4) % 4;
+		slide = Math.max(0, Math.min(3, slide + direction));
 	}
 	function key(event: KeyboardEvent) {
 		if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -55,6 +55,7 @@
 		</div>
 		<button
 			class="slide-hit previous-hit"
+			aria-disabled={slide === 0}
 			onclick={() => advance(-1)}
 			ontouchstart={(e) => (touchStart = e.touches[0].clientX)}
 			ontouchend={touchEnd}
@@ -67,6 +68,7 @@
 		>
 		<button
 			class="slide-hit next-hit"
+			aria-disabled={slide === 3}
 			onclick={() => advance(1)}
 			ontouchstart={(e) => (touchStart = e.touches[0].clientX)}
 			ontouchend={touchEnd}

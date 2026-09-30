@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Header from '$lib/Header.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import { projects } from '$lib/data';
 	const previewFormats = [
 		{ width: 520, height: 370 },
@@ -99,7 +99,7 @@
 		{/each}
 	</div>
 </main>
-<Footer />
+<OverviewFooter />
 
 <style>
 	.index-preview-rail {
