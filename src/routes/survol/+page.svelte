@@ -1,8 +1,21 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
-	import tiles from '$lib/tiles.json';
-	import { projects } from '$lib/data';
+	import TabletOverviewFooter from '$lib/TabletOverviewFooter.svelte';
+	import { overviewTiles } from '$lib/projectGallery';
+	import { portraitOverview, landscapeOverview } from '$lib/tabletOverview';
+	let tabletOrientation = $state<'portrait' | 'landscape' | null>(null);
+	const visibleTiles = $derived(tabletOrientation === 'portrait' ? portraitOverview : tabletOrientation === 'landscape' ? landscapeOverview : overviewTiles);
+	onMount(() => {
+		const tablet = window.matchMedia('(min-width: 600px) and (max-width: 1199px) and (min-height: 600px)');
+		const portrait = window.matchMedia('(orientation: portrait)');
+		const update = () => { tabletOrientation = tablet.matches ? (portrait.matches ? 'portrait' : 'landscape') : null; };
+		update();
+		tablet.addEventListener('change', update);
+		portrait.addEventListener('change', update);
+		return () => { tablet.removeEventListener('change', update); portrait.removeEventListener('change', update); };
+	});
 	let selectedProject = $state<string | null>(null);
 	let hoveredProject = $state<string | null>(null);
 	const activeProject = $derived(hoveredProject ?? selectedProject);
@@ -13,21 +26,11 @@
 	}
 	function revealProject(event: MouseEvent, slug: string) {
 		if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+		if (window.matchMedia('(min-width: 1200px) and (hover: hover) and (pointer: fine)').matches) return;
 		if (activeProject === slug) return;
 		event.preventDefault();
 		selectedProject = slug;
 	}
-	const groupSize = 5;
-	const overviewTiles = tiles.map((tile, index) => {
-		const groupIndex = Math.floor(index / groupSize);
-		return {
-			...tile,
-			project: projects[groupIndex],
-			number: (index % groupSize) + 1,
-			total: Math.min(groupSize, tiles.length - groupIndex * groupSize),
-			projectNumber: String(groupIndex + 1).padStart(2, '0')
-		};
-	});
 </script>
 
 <svelte:head><title>Survol — Bureau Normal</title></svelte:head>
@@ -37,20 +40,23 @@
 		hoveredProject = null;
 	}
 }} />
+<div class="survol-shell">
 <Header />
 <div class="overview-container">
 	<main id="main" class="overview" data-node-id="770:10208" aria-label="Survol des projets">
-		{#each overviewTiles as tile, i}
+		{#each visibleTiles as tile, i}
 			<a
 				class="project-tile"
 				class:project-highlighted={activeProject === tile.project.slug}
 				style:--highlight-delay={`${(tile.number - 1) * 85}ms`}
 				data-project={tile.project.slug}
-				href={`/projet/${tile.project.slug}`}
+				href={`/projet/${tile.project.slug}?slide=${tile.number}`}
 				onpointerenter={(event) => previewProject(event, tile.project.slug)}
 				onpointerleave={() => (hoveredProject = null)}
+				onfocus={() => (hoveredProject = tile.project.slug)}
+				onblur={() => (hoveredProject = null)}
 				onclick={(event) => revealProject(event, tile.project.slug)}
-				aria-label={`Projet ${tile.projectNumber} — ${tile.project.title}, image ${tile.number} sur ${tile.total} — ${activeProject === tile.project.slug ? 'ouvrir la première diapositive' : 'afficher le nom du projet'}`}
+				aria-label={`Projet ${tile.projectNumber} — ${tile.project.title}, ouvrir l’image ${tile.number} sur ${tile.total}`}
 				data-node-id={tile.node}
 			>
 				<img
@@ -71,9 +77,12 @@
 		{/each}
 	</main>
 </div>
-<OverviewFooter />
+<div class="standard-footer"><OverviewFooter /></div>
+<div class="tablet-footer"><TabletOverviewFooter /></div>
+</div>
 
 <style>
+	.tablet-footer { display: none; }
 	.overview-container {
 		container: project-grid / inline-size;
 	}
@@ -99,6 +108,40 @@
 		.overview {
 			gap: 8px;
 			min-height: calc(134.474826vw - 64px);
+		}
+	}
+	@media (min-width: 1200px) {
+		.project-tile .tile-project {
+			align-items: flex-start;
+			justify-content: space-between;
+			padding: 10px 8px 8px;
+			color: #333;
+			font-size: 14px;
+			font-weight: 400;
+			line-height: normal;
+			text-align: left;
+		}
+		.tile-project > span {
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+		}
+	}
+	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px) {
+		.standard-footer { display: none; }
+		.tablet-footer { display: block; }
+		.survol-shell { --margin: 20px; }
+		.survol-shell :global(.site-header) { margin-inline: 20px; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+		.survol-shell :global(.site-header .nav-link) { font-size: 14px; line-height: normal; margin-top: 16px; translate: none; color: #333; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+		.survol-shell :global(.nav-0) { grid-column: 4; }
+		.survol-shell :global(.nav-1) { grid-column: 5; }
+		.survol-shell :global(.nav-2) { grid-column: 6; }
+		.overview { gap: 6px; margin-inline: 20px; padding-top: 32px; padding-bottom: 0; min-height: calc(1067 / 768 * 100vw - 64px); align-content: start; }
+		@media (orientation: landscape) {
+			.survol-shell :global(.site-header) { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; }
+			.survol-shell :global(.nav-0) { grid-column: 6; }
+			.survol-shell :global(.nav-1) { grid-column: 7; }
+			.survol-shell :global(.nav-2) { grid-column: 8; }
+			.overview { min-height: calc(1138 / 1024 * 100vw - 64px); }
 		}
 	}
 </style>

@@ -1,0 +1,29 @@
+import tiles from './tiles.json';
+import { projects } from './data';
+
+const groupSize = 5;
+export type ProjectSlide = { kind: 'image'; src: string; flip: boolean; format: 'inset' | 'portrait' | 'full' } | { kind: 'text' };
+export function projectSlides(slug: string) {
+	const index = projects.findIndex((project) => project.slug === slug);
+	const group = tiles.slice(index * groupSize, (index + 1) * groupSize);
+	const formats = ['inset', 'inset', 'portrait', 'full', 'inset'] as const;
+	const images: ProjectSlide[] = group.length ? group.map((tile, imageIndex) => ({
+		kind: 'image' as const,
+		format: formats[imageIndex % formats.length],
+		src: `/assets/2973-295-${tile.asset}.png`,
+		flip: tile.flip
+	})) : [{ kind: 'image', src: projects[index].image, flip: false, format: 'inset' }];
+	// The text treatment is slide 02, rather than an extra slide in the loop.
+	return images.map((image, slideIndex) => slideIndex === 1 ? { kind: 'text' } as const : image);
+}
+
+export const overviewTiles = tiles.map((tile, index) => {
+	const groupIndex = Math.floor(index / groupSize);
+	return {
+		...tile,
+		project: projects[groupIndex],
+		number: index % groupSize + 1,
+		total: projectSlides(projects[groupIndex].slug).length,
+		projectNumber: String(groupIndex + 1).padStart(2, '0')
+	};
+});

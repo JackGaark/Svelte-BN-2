@@ -170,7 +170,7 @@
 				</div>
 			{/each}
 		</div>
-		{#if embedded || menu}<Header light={current.light} {onHome} />{:else}<a
+		{#if embedded || menu}<Header light={current.light} lightLogoSrc={embedded ? '/assets/3153-7182-logo-nav.svg' : undefined} {onHome} />{:else}<a
 				class="feature-logo"
 				href="/"
 				aria-label="Bureau Normal — Accueil"

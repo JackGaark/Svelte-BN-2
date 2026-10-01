@@ -39,9 +39,17 @@ const projectTitles = [
 ];
 
 // Fixed sample values keep server rendering and filter testing consistent on refresh.
+export const indexPreviewFormats = {
+	landscape: { width: 520, height: 390 },
+	portrait: { width: 368, height: 520 },
+	square: { width: 520, height: 520 }
+} as const;
+const previewPattern = ['landscape', 'portrait', 'square'] as const;
+
 export const projects = projectTitles.map((title, i) => ({
 	slug: `grande-allee-${i + 1}`,
 	title,
+	previewFormat: previewPattern[i % previewPattern.length],
 	type: [1, 3, 6, 8, 11, 14, 17, 20, 23, 26, 29, 32].includes(i)
 		? 'Commercial'
 		: 'Résidentiel',

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	let { light = false, mobileLight = false, onHome }: { light?: boolean; mobileLight?: boolean; onHome?: (event: MouseEvent) => void } =
+	let { light = false, mobileLight = false, lightLogoSrc = '/assets/2888-486-imgLogoNav.svg', darkLogoSrc = '/assets/2973-503-imgLogoNav.svg', onHome }: { light?: boolean; mobileLight?: boolean; lightLogoSrc?: string; darkLogoSrc?: string; onHome?: (event: MouseEvent) => void } =
 		$props();
 </script>
 
@@ -19,7 +19,7 @@
 				<source media="(max-width: 599px)" srcset="/assets/2888-486-imgLogoNav.svg" />
 			{/if}
 			<img
-			src={light ? '/assets/2888-486-imgLogoNav.svg' : '/assets/2973-503-imgLogoNav.svg'}
+			src={light ? lightLogoSrc : darkLogoSrc}
 			alt="Bureau Normal"
 		/></picture></a
 	>
@@ -32,3 +32,21 @@
 		>
 	{/each}
 </header>
+
+<style>
+	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
+		.site-header .nav-link {
+			font-size: 14px;
+			font-weight: 400;
+			line-height: normal;
+			margin-top: 16px;
+			translate: none;
+			color: #333;
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+		}
+		.site-header.light .nav-link {
+			color: #e6e6e6;
+		}
+	}
+</style>

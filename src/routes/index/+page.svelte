@@ -3,7 +3,7 @@
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import IndexAccordion from '$lib/IndexAccordion.svelte';
-	import { projects } from '$lib/data';
+	import { projects, indexPreviewFormats } from '$lib/data';
 	import SortHeading from '$lib/SortHeading.svelte';
 	import { sortColumns, sortProjects, type SortKey, type SortDirection } from '$lib/projectSort';
 	let sortKey = $state<SortKey | null>('dates');
@@ -17,16 +17,13 @@
 		await tick();
 		positionPreview();
 	}
-	const previewFormats = [
-		{ width: 520, height: 370 },
-		{ width: 368, height: 520 },
-		{ width: 520, height: 520 }
-	];
 	let active = $state(0);
 	let rail: HTMLDivElement;
 	let list: HTMLDivElement;
 	let preview: HTMLImageElement;
 	let previewTop = $state(0);
+	let selectionTop = $state(0);
+	let selectionScale = $state(1);
 	let previewHeight = $state(0);
 	let previewWidth = $state(0);
 
@@ -38,7 +35,7 @@
 		if (!row || !firstRow) return;
 		const railRect = rail.getBoundingClientRect();
 		const rowRect = row.getBoundingClientRect();
-		const format = previewFormats[active % previewFormats.length];
+		const format = indexPreviewFormats[sortedProjects[active].previewFormat];
 		const scale = Math.min(
 			rail.clientWidth / 520,
 			window.matchMedia('(max-width: 599px)').matches ? 180 / 520 : Infinity
@@ -46,15 +43,15 @@
 		previewWidth = format.width * scale;
 		previewHeight = format.height * scale;
 		const lowerEdge = Math.min(list.getBoundingClientRect().bottom, window.innerHeight - 20);
-		const firstProjectTop = firstRow.getBoundingClientRect().top + 3;
-		const topAligned = rowRect.top + 3;
-		const bottomAligned = rowRect.top + 20 - previewHeight;
-		// Keep a corner attached to this row instead of clamping between rows.
-		// If bottom alignment crosses the first project, allow overflow below instead.
-		const top = topAligned + previewHeight > lowerEdge && bottomAligned >= firstProjectTop
-			? bottomAligned
-			: topAligned;
-		previewTop = top - railRect.top;
+		const firstProjectTop = firstRow.getBoundingClientRect().top + 2;
+		const topAligned = rowRect.top + 2;
+		const textBottom = Math.max(...Array.from(row.children, (cell) => cell.getBoundingClientRect().bottom));
+		const bottomAligned = textBottom - 2 - previewHeight;
+		// Keep the rule and image on the same edge of the selected listing.
+		const alignBottom = topAligned + previewHeight > lowerEdge && bottomAligned >= firstProjectTop;
+		previewTop = (alignBottom ? bottomAligned : topAligned) - railRect.top;
+		selectionTop = (alignBottom ? textBottom + 2 : rowRect.top - 2) - railRect.top;
+		selectionScale = (rail.parentElement?.clientWidth ?? 1400) / 1400;
 	}
 	function selectProject(index: number) {
 		active = index;
@@ -83,12 +80,16 @@
 
 <svelte:head><title>Index — Bureau Normal</title></svelte:head>
 <div class="index-shell">
-	<Header />
+	<Header darkLogoSrc="/assets/index-logo-nav.svg" />
 	<main id="main">
-		<div class="index-page design-grid" data-node-id="2927:2132">
+		<div class="index-page design-grid" data-node-id="3151:4714">
+			<div class="selection-rule" aria-hidden="true" style:--selection-top={`${selectionTop}px`} style:--selection-scale={selectionScale}>
+				<img src="/assets/index-selection-line.svg" alt="" />
+			</div>
 			<div class="index-preview-rail" bind:this={rail}>
 				<div
 					class="index-preview"
+					data-format={sortedProjects[active].previewFormat}
 					style:--preview-top={`${previewTop}px`}
 					style:--preview-height={`${previewHeight}px`}
 					style:--preview-width={`${previewWidth}px`}
@@ -105,7 +106,7 @@
 				<div class="list-heading list-grid" role="row">
 					{#each sortColumns as column}
 						<span role="columnheader" aria-sort={sortKey === column.key ? sortDirection : 'none'}>
-							<SortHeading label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => changeSort(column.key)} />
+							<SortHeading compact label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => changeSort(column.key)} />
 						</span>
 					{/each}
 				</div>
@@ -127,7 +128,7 @@
 		</div>
 		<div class="tablet-view"><IndexAccordion projects={sortedProjects} {sortKey} {sortDirection} onchangeSort={changeSort} /></div>
 	</main>
-	<OverviewFooter contacts />
+	<OverviewFooter contacts indexDesign />
 </div>
 
 <style>
@@ -206,19 +207,76 @@
 		aspect-ratio: auto;
 		object-fit: cover;
 	}
-	.list-row {
+	.index-shell {
+		--ink: #000;
+		color: var(--ink);
+	}
+	.index-shell :global(.nav-link) { color: var(--ink); }
+	.index-page {
 		position: relative;
+		padding-top: 34px;
+		min-height: calc(1592 / 1440 * 100vw - 64px);
 	}
-	.list-row.selected {
-		border-bottom-color: transparent;
+	.project-list {
+		font-size: 14px;
+		color: var(--ink);
 	}
-	.list-row.selected::after {
-		content: '';
+	.list-heading {
+		height: 44px;
+		padding-top: 0;
+		line-height: 15px;
+		color: inherit;
+	}
+	.list-heading :global(button) {
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+	}
+	.list-row {
+		min-height: 27px;
+		padding-bottom: 12px;
+		border: 0;
+		line-height: 15px;
+	}
+	.list-row.selected { color: inherit; }
+	.dates {
+		display: grid;
+		grid-template-columns: 44px 24px 36px;
+		gap: 0;
+	}
+	.dates > span { width: 12px; text-align: center; }
+	.selection-rule {
 		position: absolute;
-		top: 20px;
-		left: 0;
-		right: 0;
-		border-bottom: 1px solid #8e8c8a;
+		inset: 34px 0 auto;
+		transform: translateY(var(--selection-top));
+		pointer-events: none;
+		z-index: 1;
+	}
+	.selection-rule img {
+		transform: scaleX(var(--selection-scale));
+		transform-origin: left center;
+	}
+	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
+		.index-shell :global(.nav-link) {
+			font-size: 14px;
+			line-height: normal;
+			margin-top: 16px;
+			translate: none;
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+		}
+		.index-shell :global(.nav-link.active) {
+			position: relative;
+			text-decoration: none;
+		}
+		.index-shell :global(.nav-link.active)::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 12px;
+			width: 29px;
+			height: 1px;
+			background: url('/assets/index-nav-underline.svg') no-repeat;
+		}
 	}
 	@media (max-width: 1023px) {
 		.index-preview-rail {
@@ -260,10 +318,6 @@
 		.index-preview {
 			position: static;
 			transform: none;
-		}
-		.list-row.selected::after {
-			top: auto;
-			bottom: 0;
 		}
 	}
 	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {

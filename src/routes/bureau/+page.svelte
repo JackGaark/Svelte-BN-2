@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Header from '$lib/Header.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import OverviewFooter from '$lib/OverviewFooter.svelte';
 </script>
 
 <svelte:head><title>Bureau — Bureau Normal</title></svelte:head>
 <Header />
-<main id="main" class="bureau-page design-grid" data-node-id="2973:566">
+<main id="main" class="bureau-page design-grid" data-node-id="3153:8448">
 	<h1>
 		En quoi normal, bureau de quoi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id
 		odio neque. In hac habitasse platea dictumst. Nunc auctor tortor finibus, facilisis nunc sed,
@@ -38,4 +38,22 @@
 		>
 	</address>
 </main>
-<Footer large />
+<OverviewFooter indexDesign />
+
+<style>
+	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
+		.bureau-page {
+			color: #000;
+			grid-template-rows: 486px 231px auto;
+			min-height: calc(1538 / 1440 * 100vw - 64px);
+		}
+		.bureau-page h1 {
+			font-size: 42px;
+			line-height: 46px;
+			padding-left: 2px;
+		}
+		.bureau-copy { font-size: 17px; line-height: normal; }
+		.contact { margin-top: 56px; line-height: normal; align-items: start; }
+		.contact > * { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+	}
+</style>

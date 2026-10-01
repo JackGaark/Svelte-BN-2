@@ -950,6 +950,41 @@ a:hover {
 	height: 100dvh;
 	min-height: 0;
 }
+/* Homepage desktop composition: 1440 × 900 Figma reference. */
+@media (min-width: 1200px) and (min-height: 600px) and (pointer: fine) {
+	.landing-gallery .feature-photo.stair-photo {
+		top: calc(-19 / 900 * 100%);
+		height: 120%;
+	}
+	.landing-gallery .site-header .nav-link {
+		font-size: 14px;
+		font-weight: 400;
+		line-height: normal;
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+		margin-top: 16px;
+		translate: none;
+	}
+	.landing-gallery .site-header .brand img {
+		filter: none;
+		opacity: 1;
+	}
+	.landing-gallery .feature-caption {
+		bottom: 25px;
+		height: 15px;
+		align-items: start;
+		line-height: 15px;
+		color: rgba(230, 230, 230, 0.9);
+	}
+	.landing-gallery .dark-ink .feature-caption {
+		color: #333;
+	}
+	.landing-gallery .feature-caption > span,
+	.landing-gallery .feature-caption > a {
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+	}
+}
 html {
 	scrollbar-gutter: stable;
 }
