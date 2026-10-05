@@ -1,20 +1,22 @@
 <script lang="ts">
+	import BlinkingEye from './BlinkingEye.svelte';
+	let { indexDesign = false }: { indexDesign?: boolean } = $props();
 	let width = $state(768);
 </script>
 
-<footer class="tablet-footer" bind:clientWidth={width}>
+<footer class="tablet-footer" class:index-design={indexDesign} bind:clientWidth={width}>
 	<a class="art-link" href="/" aria-label="Bureau Normal — Retour à l’accueil">
 		<span class="art portrait-art" style:transform={`scale(${width / 768})`} aria-hidden="true">
 			<img class="symbol" src="/assets/tablet-portrait-symbol.svg" alt="" />
 			<img class="wordmark" src="/assets/tablet-portrait-wordmark.svg" alt="" />
-			<img class="bottom-eye" src="/assets/tablet-portrait-eye-bottom.svg" alt="" />
-			<img class="top-eye" src="/assets/tablet-portrait-eye-top.svg" alt="" />
+			<span class="bottom-eye"><BlinkingEye delay={0.15} /></span>
+			<span class="top-eye"><BlinkingEye /></span>
 		</span>
 		<span class="art landscape-art" style:transform={`scale(${width / 1024})`} aria-hidden="true">
 			<img class="symbol" src="/assets/tablet-landscape-symbol.svg" alt="" />
 			<img class="wordmark" src="/assets/tablet-landscape-wordmark.svg" alt="" />
-			<img class="bottom-eye" src="/assets/tablet-landscape-eye-bottom.svg" alt="" />
-			<img class="top-eye" src="/assets/tablet-landscape-eye-top.svg" alt="" />
+			<span class="bottom-eye"><BlinkingEye delay={0.15} /></span>
+			<span class="top-eye"><BlinkingEye /></span>
 		</span>
 	</a>
 	<div class="details">
@@ -29,6 +31,12 @@
 	.art-link { display: block; height: 88.3276%; }
 	.art { position: absolute; inset: 0 auto auto 0; transform-origin: top left; }
 	.art img { position: absolute; }
+	.bottom-eye,
+	.top-eye { position: absolute; }
+	.portrait-art .bottom-eye :global(svg),
+	.portrait-art .top-eye :global(svg) { transform: translateY(-1.54px) scale(0.5194); transform-origin: top left; }
+	.landscape-art .bottom-eye :global(svg),
+	.landscape-art .top-eye :global(svg) { transform: translateY(-2.084px) scale(0.70458); transform-origin: top left; }
 	.portrait-art .symbol { left: 20.894px; top: 14.52px; }
 	.portrait-art .wordmark { left: 234.264px; top: 22.0145px; }
 	.portrait-art .bottom-eye { left: 57.604px; top: 94.98px; }
@@ -45,5 +53,9 @@
 		.portrait-art { display: none; }
 		.landscape-art { display: block; }
 		.details { top: 94.8598%; left: 62.5%; }
+		.index-design { height: calc(856 / 1024 * 100vw); }
+		.index-design .art-link { height: calc(800 / 856 * 100%); }
+		.index-design .landscape-art { top: 50%; }
+		.index-design .details { top: calc(834 / 856 * 100%); gap: 8px; }
 	}
 </style>

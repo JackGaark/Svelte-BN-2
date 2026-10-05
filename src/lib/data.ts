@@ -45,11 +45,19 @@ export const indexPreviewFormats = {
 	square: { width: 520, height: 520 }
 } as const;
 const previewPattern = ['landscape', 'portrait', 'square'] as const;
+// Shuffled text positions stay fixed so thumbnail links always open the same slide.
+// Positions are zero-based and count toward the total gallery length.
+const textSlidePositions: Record<number, number[]> = {
+	2: [3, 8],
+	5: [1, 6],
+	9: [4, 9]
+};
 
 export const projects = projectTitles.map((title, i) => ({
 	slug: `grande-allee-${i + 1}`,
 	title,
 	imageCount: [2, 5, 9].includes(i) ? 11 : [5, 3, 4][i % 3],
+	textSlidePositions: textSlidePositions[i] ?? [1],
 	previewFormat: previewPattern[i % previewPattern.length],
 	type: [1, 3, 6, 8, 11, 14, 17, 20, 23, 26, 29, 32].includes(i)
 		? 'Commercial'

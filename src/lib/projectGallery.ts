@@ -18,8 +18,10 @@ export function projectSlides(slug: string) {
 		src: `/assets/2973-295-${tile.asset}.png`,
 		flip: tile.flip
 	})) : [{ kind: 'image', src: projects[index].image, flip: false, format: 'inset' }];
-	// The text treatment is slide 02, rather than an extra slide in the loop.
-	return images.map((image, slideIndex) => slideIndex === 1 ? { kind: 'text' } as const : image);
+	// Text slides occupy gallery slots, so image + text slides match thumbnail totals.
+	return images.map((image, slideIndex) => projects[index].textSlidePositions.includes(slideIndex)
+		? { kind: 'text' } as const
+		: image);
 }
 
 export const overviewTiles = galleries.flatMap((group, projectIndex) => group.map((tile, imageIndex) => ({

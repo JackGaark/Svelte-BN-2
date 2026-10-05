@@ -22,7 +22,6 @@
 	class="tablet-index"
 	bind:clientWidth={width}
 	style:--line-scale={(width - 38) / 986}
-	style:--expanded-count={expanded.length}
 	class:first-expanded={expanded.includes(projects[0].slug)}
 	aria-label="Index des projets"
 >
@@ -274,7 +273,7 @@
 			line-height: 15px;
 			color: #333;
 			padding: 10px 18px 0 20px;
-			min-height: calc(1771 / 1024 * 100vw - 64px + var(--expanded-count) * (740 / 1024 * 100vw));
+			min-height: calc(915 / 1024 * 100vw - 64px);
 		}
 		.expand-all {
 			position: relative;

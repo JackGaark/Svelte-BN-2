@@ -134,7 +134,7 @@
 		<div class="tablet-view"><IndexAccordion projects={sortedProjects} {sortKey} {sortDirection} onchangeSort={changeSort} /></div>
 	</main>
 	<div class="standard-index-footer"><OverviewFooter contacts indexDesign /></div>
-	<div class="landscape-index-footer"><TabletOverviewFooter /></div>
+	<div class="landscape-index-footer"><TabletOverviewFooter indexDesign /></div>
 </div>
 
 <style>

@@ -26,13 +26,8 @@
 				alt=""
 				data-node-id="2861:500"
 			/>
-			{#if indexDesign}
-				<img class="footer-eye-bottom" src="/assets/index-footer-eye-bottom.svg" alt="" />
-				<img class="footer-eye-top" src="/assets/index-footer-eye-top.svg" alt="" />
-			{:else}
-				<span class="footer-eye-bottom"><BlinkingEye delay={0.15} /></span>
-				<span class="footer-eye-top"><BlinkingEye /></span>
-			{/if}
+			<span class="footer-eye-bottom"><BlinkingEye delay={0.15} /></span>
+			<span class="footer-eye-top"><BlinkingEye /></span>
 		</span>
 	</a>
 	<Footer mark={false} {contacts} />
