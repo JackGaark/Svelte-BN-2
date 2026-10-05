@@ -2,6 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
+	import TabletOverviewFooter from '$lib/TabletOverviewFooter.svelte';
 	import IndexAccordion from '$lib/IndexAccordion.svelte';
 	import { projects, indexPreviewFormats } from '$lib/data';
 	import SortHeading from '$lib/SortHeading.svelte';
@@ -132,10 +133,12 @@
 		</div>
 		<div class="tablet-view"><IndexAccordion projects={sortedProjects} {sortKey} {sortDirection} onchangeSort={changeSort} /></div>
 	</main>
-	<OverviewFooter contacts indexDesign />
+	<div class="standard-index-footer"><OverviewFooter contacts indexDesign /></div>
+	<div class="landscape-index-footer"><TabletOverviewFooter /></div>
 </div>
 
 <style>
+	.landscape-index-footer { display: none; }
 	.tablet-view {
 		display: none;
 	}
@@ -173,11 +176,24 @@
 			grid-column: 6;
 		}
 		@media (orientation: landscape) {
+			.standard-index-footer { display: none; }
+			.landscape-index-footer { display: block; }
 			.index-shell :global(.site-header) {
-				margin-inline: var(--margin);
+				margin-inline: 20px;
 				grid-template-columns: repeat(8, minmax(0, 1fr));
-				padding-top: 8px;
+				gap: 8px;
+				padding-top: 20px;
 			}
+			.index-shell :global(.nav-link) {
+				font-size: 14px;
+				line-height: normal;
+				margin-top: 16px;
+				translate: none;
+				color: #333;
+				text-box-trim: trim-both;
+				text-box-edge: cap alphabetic;
+			}
+			.index-shell :global(.nav-link.active) { text-decoration: none; }
 			.index-shell :global(.nav-0) {
 				grid-column: 6;
 			}

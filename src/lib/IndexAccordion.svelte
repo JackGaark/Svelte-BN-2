@@ -9,6 +9,7 @@
 		onchangeSort: (key: SortKey) => void;
 	} = $props();
 	let expanded = $state<string[]>([]);
+	let width = $state(1024);
 	const allExpanded = $derived(expanded.length === projects.length);
 	function toggle(slug: string) {
 		expanded = expanded.includes(slug)
@@ -19,6 +20,9 @@
 
 <section
 	class="tablet-index"
+	bind:clientWidth={width}
+	style:--line-scale={(width - 38) / 986}
+	style:--expanded-count={expanded.length}
 	class:first-expanded={expanded.includes(projects[0].slug)}
 	aria-label="Index des projets"
 >
@@ -27,20 +31,26 @@
 		aria-expanded={allExpanded}
 		onclick={() => (expanded = allExpanded ? [] : projects.map((project) => project.slug))}
 	>
-		{allExpanded ? 'Collapse All' : 'Expand All'}<span aria-hidden="true"
+		<span class="standard-label">{allExpanded ? 'Collapse All' : 'Expand All'}</span>
+		<span class="landscape-label">{allExpanded ? 'Réduire tout' : 'Développer tout'}</span>
+		<img class="landscape-expand" src="/assets/tablet-index-expand.svg" alt="" />
+		<span class="standard-expand" aria-hidden="true"
 			>{allExpanded ? '⌃' : '⌄'}</span
 		>
 	</button>
 	<div class="columns headings">
 		{#each sortColumns as column}
 			<span class:project-status={column.key === 'status'}>
-				<SortHeading label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => onchangeSort(column.key)} />
+				<SortHeading tabletLandscape label={column.label} direction={sortKey === column.key ? sortDirection : null} onclick={() => onchangeSort(column.key)} />
 			</span>
 		{/each}
 	</div>
 	{#each projects as project (project.slug)}
 		{@const open = expanded.includes(project.slug)}
 		<article class:expanded={open}>
+			{#if open}
+				<span class="landscape-rule" aria-hidden="true"><img src="/assets/tablet-index-selection-line.svg" alt="" /></span>
+			{/if}
 			<div id={`preview-${project.slug}`} class="project-image" hidden={!open}>
 				<a href={`/projet/${project.slug}`} aria-label={`Ouvrir ${project.title} — première image`}>
 					<img src={project.image} alt={project.title} loading="lazy" />
@@ -64,6 +74,9 @@
 </section>
 
 <style>
+	.landscape-label,
+	.landscape-expand,
+	.landscape-rule { display: none; }
 	.mobile-divider {
 		display: none;
 	}
@@ -85,7 +98,7 @@
 		margin-bottom: 21px;
 		text-align: left;
 	}
-	.expand-all span {
+	.standard-expand {
 		font-size: 24px;
 	}
 	.columns {
@@ -177,7 +190,7 @@
 			margin-bottom: 11px;
 			text-transform: uppercase;
 		}
-		.expand-all span {
+		.standard-expand {
 			font-size: 12px;
 		}
 		.columns {
@@ -254,5 +267,62 @@
 		.mobile-divider {
 			mask-image: url('/assets/mobile-index-landscape-divider.svg');
 		}
+	}
+	@media (min-width: 600px) and (min-height: 600px) and (orientation: landscape) {
+		.tablet-index {
+			font-size: 14px;
+			line-height: 15px;
+			color: #333;
+			padding: 10px 18px 0 20px;
+			min-height: calc(1771 / 1024 * 100vw - 64px + var(--expanded-count) * (740 / 1024 * 100vw));
+		}
+		.expand-all {
+			position: relative;
+			min-height: 15px;
+			gap: 7px;
+			margin-bottom: 9px;
+			text-transform: uppercase;
+			color: #222;
+		}
+		.standard-label,
+		.standard-expand { display: none; }
+		.landscape-label { display: block; }
+		.landscape-expand { display: block; position: absolute; left: 100px; top: 0; }
+		.landscape-label,
+		.headings :global(button) {
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+		}
+		.columns {
+			grid-template-columns: minmax(0, 364fr) minmax(0, 241fr) minmax(0, 115fr) minmax(0, 242fr);
+			gap: 8px;
+		}
+		.headings,
+		.first-expanded .headings {
+			font-weight: 400;
+			text-transform: uppercase;
+			color: #222;
+			height: 15px;
+			margin-bottom: 29px;
+		}
+		article { position: relative; display: flex; flex-direction: column; }
+		.project-toggle,
+		.expanded .project-toggle {
+			order: -1;
+			padding: 0;
+			min-height: 27px;
+		}
+		.expanded .project-toggle { min-height: 17px; }
+		.project-dates {
+			display: grid;
+			grid-template-columns: 44px 24px 36px;
+			gap: 0;
+		}
+		.project-dates > span { width: 12px; text-align: center; }
+		.project-image { width: 100%; }
+		.project-image img { aspect-ratio: 986 / 740; }
+		.expanded { border: 0; margin-bottom: 10px; }
+		.landscape-rule { display: block; position: absolute; top: -3px; left: 0; }
+		.landscape-rule img { transform: scaleX(var(--line-scale)); transform-origin: left center; }
 	}
 </style>
