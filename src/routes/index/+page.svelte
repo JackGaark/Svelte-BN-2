@@ -6,7 +6,7 @@
 	import { projects, indexPreviewFormats } from '$lib/data';
 	import SortHeading from '$lib/SortHeading.svelte';
 	import { sortColumns, sortProjects, type SortKey, type SortDirection } from '$lib/projectSort';
-	let sortKey = $state<SortKey | null>('dates');
+	let sortKey = $state<SortKey | null>(null);
 	let sortDirection = $state<SortDirection>('descending');
 	let sortedProjects = $derived(sortProjects(projects, sortKey, sortDirection));
 	async function changeSort(key: SortKey) {
@@ -23,6 +23,7 @@
 	let preview: HTMLImageElement;
 	let previewTop = $state(0);
 	let selectionTop = $state(0);
+	let selectionLeft = $state(0);
 	let selectionScale = $state(1);
 	let previewHeight = $state(0);
 	let previewWidth = $state(0);
@@ -50,7 +51,10 @@
 		// Keep the rule and image on the same edge of the selected listing.
 		const alignBottom = topAligned + previewHeight > lowerEdge && bottomAligned >= firstProjectTop;
 		previewTop = (alignBottom ? bottomAligned : topAligned) - railRect.top;
-		selectionTop = (alignBottom ? textBottom + 2 : rowRect.top - 2) - railRect.top;
+		selectionTop = (alignBottom ? textBottom + 3 : rowRect.top - 3) - railRect.top;
+		selectionLeft = sortedProjects[active].previewFormat === 'portrait'
+			? railRect.right - previewWidth - (rail.parentElement?.getBoundingClientRect().left ?? railRect.left)
+			: 0;
 		selectionScale = (rail.parentElement?.clientWidth ?? 1400) / 1400;
 	}
 	function selectProject(index: number) {
@@ -83,7 +87,7 @@
 	<Header darkLogoSrc="/assets/index-logo-nav.svg" />
 	<main id="main">
 		<div class="index-page design-grid" data-node-id="3151:4714">
-			<div class="selection-rule" aria-hidden="true" style:--selection-top={`${selectionTop}px`} style:--selection-scale={selectionScale}>
+			<div class="selection-rule" aria-hidden="true" style:--selection-top={`${selectionTop}px`} style:--selection-left={`${selectionLeft}px`} style:--selection-scale={selectionScale}>
 				<img src="/assets/index-selection-line.svg" alt="" />
 			</div>
 			<div class="index-preview-rail" bind:this={rail}>
@@ -245,6 +249,7 @@
 	}
 	.dates > span { width: 12px; text-align: center; }
 	.selection-rule {
+		clip-path: inset(-1px 0 -1px var(--selection-left));
 		position: absolute;
 		inset: 34px 0 auto;
 		transform: translateY(var(--selection-top));

@@ -14,7 +14,7 @@
 	aria-label={`${label} : trier par ordre ${direction === 'ascending' ? 'décroissant' : 'croissant'}`}
 >
 	{label}<img
-		class:inactive={direction === null && !compact}
+		class:inactive={direction === null}
 		src={compact
 			? (direction === 'descending' ? '/assets/index-sort-down.svg' : '/assets/index-sort-up.svg')
 			: (direction === 'descending' ? '/assets/sort-arrow-down.svg' : '/assets/sort-arrow-up.svg')}
@@ -29,11 +29,12 @@
 		text-transform: inherit;
 	}
 	img {
+		filter: brightness(0);
 		display: inline-block;
 		margin-left: 0.25em;
 		vertical-align: baseline;
 	}
 	.inactive {
-		opacity: 0.4;
+		opacity: 0.5;
 	}
 </style>
