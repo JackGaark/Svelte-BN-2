@@ -49,7 +49,7 @@ const previewPattern = ['landscape', 'portrait', 'square'] as const;
 export const projects = projectTitles.map((title, i) => ({
 	slug: `grande-allee-${i + 1}`,
 	title,
-	imageCount: [5, 3, 4][i % 3],
+	imageCount: [2, 5, 9].includes(i) ? 11 : [5, 3, 4][i % 3],
 	previewFormat: previewPattern[i % previewPattern.length],
 	type: [1, 3, 6, 8, 11, 14, 17, 20, 23, 26, 29, 32].includes(i)
 		? 'Commercial'
