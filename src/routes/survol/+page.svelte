@@ -1,21 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import TabletOverviewFooter from '$lib/TabletOverviewFooter.svelte';
 	import { overviewTiles } from '$lib/projectGallery';
-	import { portraitOverview, landscapeOverview } from '$lib/tabletOverview';
-	let tabletOrientation = $state<'portrait' | 'landscape' | null>(null);
-	const visibleTiles = $derived(tabletOrientation === 'portrait' ? portraitOverview : tabletOrientation === 'landscape' ? landscapeOverview : overviewTiles);
-	onMount(() => {
-		const tablet = window.matchMedia('(min-width: 600px) and (max-width: 1199px) and (min-height: 600px)');
-		const portrait = window.matchMedia('(orientation: portrait)');
-		const update = () => { tabletOrientation = tablet.matches ? (portrait.matches ? 'portrait' : 'landscape') : null; };
-		update();
-		tablet.addEventListener('change', update);
-		portrait.addEventListener('change', update);
-		return () => { tablet.removeEventListener('change', update); portrait.removeEventListener('change', update); };
-	});
 	let selectedProject = $state<string | null>(null);
 	let hoveredProject = $state<string | null>(null);
 	const activeProject = $derived(hoveredProject ?? selectedProject);
@@ -44,7 +31,7 @@
 <Header />
 <div class="overview-container">
 	<main id="main" class="overview" data-node-id="770:10208" aria-label="Survol des projets">
-		{#each visibleTiles as tile, i}
+		{#each overviewTiles as tile, i}
 			<a
 				class="project-tile"
 				class:project-highlighted={activeProject === tile.project.slug}

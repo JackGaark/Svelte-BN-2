@@ -1,11 +1,16 @@
 import tiles from './tiles.json';
 import { projects } from './data';
 
-const groupSize = 5;
+// Each project owns one gallery; overview numbering and slides use this same list.
+const galleries = projects.map((project, projectIndex) =>
+	Array.from({ length: project.imageCount }, (_, imageIndex) =>
+		tiles[(projectIndex * 5 + imageIndex) % tiles.length]
+	)
+);
 export type ProjectSlide = { kind: 'image'; src: string; flip: boolean; format: 'inset' | 'portrait' | 'full' } | { kind: 'text' };
 export function projectSlides(slug: string) {
 	const index = projects.findIndex((project) => project.slug === slug);
-	const group = tiles.slice(index * groupSize, (index + 1) * groupSize);
+	const group = galleries[index] ?? [];
 	const formats = ['inset', 'inset', 'portrait', 'full', 'inset'] as const;
 	const images: ProjectSlide[] = group.length ? group.map((tile, imageIndex) => ({
 		kind: 'image' as const,
@@ -17,13 +22,10 @@ export function projectSlides(slug: string) {
 	return images.map((image, slideIndex) => slideIndex === 1 ? { kind: 'text' } as const : image);
 }
 
-export const overviewTiles = tiles.map((tile, index) => {
-	const groupIndex = Math.floor(index / groupSize);
-	return {
+export const overviewTiles = galleries.flatMap((group, projectIndex) => group.map((tile, imageIndex) => ({
 		...tile,
-		project: projects[groupIndex],
-		number: index % groupSize + 1,
-		total: projectSlides(projects[groupIndex].slug).length,
-		projectNumber: String(groupIndex + 1).padStart(2, '0')
-	};
-});
+		project: projects[projectIndex],
+		number: imageIndex + 1,
+		total: group.length,
+		projectNumber: String(projectIndex + 1).padStart(2, '0')
+	})));
