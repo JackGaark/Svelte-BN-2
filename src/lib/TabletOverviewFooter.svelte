@@ -48,6 +48,12 @@
 	.landscape-art .top-eye { left: 70.896px; top: 101.1885px; }
 	.details { position: absolute; top: 93.3934%; left: 50.291667%; right: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); font-size: 10px; letter-spacing: 0.2px; line-height: normal; }
 	.details > * { text-box-trim: trim-both; text-box-edge: cap alphabetic; white-space: nowrap; }
+	@media (orientation: portrait) {
+		.index-design { height: calc(666 / 768 * 100vw); }
+		.index-design .art-link { height: calc(607 / 666 * 100%); }
+		.index-design .portrait-art { top: 50%; }
+		.index-design .details { top: calc(644 / 666 * 100%); grid-template-columns: calc(116 / 768 * 100vw) calc(116 / 768 * 100vw) calc(68 / 768 * 100vw); column-gap: calc(6 / 768 * 100vw); }
+	}
 	@media (orientation: landscape) {
 		.tablet-footer { height: calc(428 / 1024 * 100vw); }
 		.portrait-art { display: none; }

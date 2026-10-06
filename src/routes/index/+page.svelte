@@ -155,26 +155,27 @@
 		.tablet-view {
 			display: block;
 		}
+		.standard-index-footer { display: none; }
+		.landscape-index-footer { display: block; }
 		.index-shell :global(.site-header) {
-			margin-inline: var(--margin);
+			margin-inline: 20px;
 			grid-template-columns: repeat(6, minmax(0, 1fr));
-			gap: 10px;
-			padding-top: 9px;
+			gap: 8px;
+			padding-top: 20px;
 		}
 		.index-shell :global(.nav-link) {
-			font-size: 22px;
-			line-height: 27px;
-			margin-top: 0;
+			font-size: 14px;
+			line-height: normal;
+			margin-top: 16px;
+			translate: none;
+			color: #333;
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
 		}
-		.index-shell :global(.nav-0) {
-			grid-column: 4;
-		}
-		.index-shell :global(.nav-1) {
-			grid-column: 5;
-		}
-		.index-shell :global(.nav-2) {
-			grid-column: 6;
-		}
+		.index-shell :global(.nav-link.active) { text-decoration: none; }
+		.index-shell :global(.nav-0) { grid-column: 4; }
+		.index-shell :global(.nav-1) { grid-column: 5; }
+		.index-shell :global(.nav-2) { grid-column: 6; }
 		@media (orientation: landscape) {
 			.standard-index-footer { display: none; }
 			.landscape-index-footer { display: block; }

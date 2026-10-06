@@ -123,11 +123,6 @@
 		</div>
 		<nav class="project-wayfinding" aria-label="Navigation entre projets">
 			<a href={`/projet/${data.previous}`}>Projet précédent</a>
-			<div class="slide-progress" role="group" aria-label="Diapositives du projet" lang="fr">
-				{#each data.slides as item, i}
-					<button class:text-marker={item.kind === 'text'} class:current={slide === i} aria-current={slide === i ? 'step' : undefined} aria-label={`Diapositive ${i + 1} sur ${data.slides.length} — ${item.kind === 'text' ? 'Texte' : `Image ${item.imageNumber} sur ${item.imageTotal}`}`} onclick={() => showSlide(i)}><span aria-hidden="true"></span></button>
-				{/each}
-			</div>
 			<a href={`/projet/${data.next}`}
 				>Projet suivant</a
 			>
@@ -137,15 +132,6 @@
 
 <style>
 	.slide-counter { min-width: 5ch; font-variant-numeric: tabular-nums; }
-	.project-wayfinding { align-items: center; flex-wrap: wrap; gap: 12px; }
-	.slide-progress { display: flex; justify-content: center; flex-wrap: wrap; }
-	.slide-progress button { display: grid; place-items: center; width: 18px; height: 24px; }
-	.slide-progress button span { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.35; }
-	.slide-progress .text-marker span { border-radius: 0; }
-	.slide-progress .current span { opacity: 1; }
-	@media (max-width: 599px) {
-		.slide-progress { order: 1; flex-basis: 100%; }
-	}
 	.project-caption { grid-row: 2; }
 	.project-wayfinding { grid-row: 3; }
 	.image-placeholder { background: var(--placeholder); }

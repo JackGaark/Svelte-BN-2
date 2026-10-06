@@ -21,7 +21,7 @@
 <section
 	class="tablet-index"
 	bind:clientWidth={width}
-	style:--line-scale={(width - 38) / 986}
+	style:--line-scale={(width - (width < 900 ? 40 : 38)) / 986}
 	class:first-expanded={expanded.includes(projects[0].slug)}
 	aria-label="Index des projets"
 >
@@ -267,7 +267,7 @@
 			mask-image: url('/assets/mobile-index-landscape-divider.svg');
 		}
 	}
-	@media (min-width: 600px) and (min-height: 600px) and (orientation: landscape) {
+	@media (min-width: 600px) and (min-height: 600px) {
 		.tablet-index {
 			font-size: 14px;
 			line-height: 15px;
@@ -323,5 +323,13 @@
 		.expanded { border: 0; margin-bottom: 10px; }
 		.landscape-rule { display: block; position: absolute; top: -3px; left: 0; }
 		.landscape-rule img { transform: scaleX(var(--line-scale)); transform-origin: left center; }
+	}
+	@media (min-width: 600px) and (min-height: 600px) and (orientation: portrait) {
+		.tablet-index { padding: 10px 20px 0; min-height: calc(791 / 768 * 100vw - 64px); }
+		.columns { grid-template-columns: minmax(0, 358fr) minmax(0, 114fr) minmax(0, 240fr); }
+		.headings, .first-expanded .headings { margin-bottom: 28px; }
+		.project-toggle { min-height: 22px; }
+		.project-toggle > span:first-child { padding-left: 1px; }
+		.project-image img { aspect-ratio: 728 / 546; }
 	}
 </style>

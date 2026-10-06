@@ -53,7 +53,7 @@
 	.inactive {
 		opacity: 0.5;
 	}
-	@media (min-width: 600px) and (min-height: 600px) and (orientation: landscape) {
+	@media (min-width: 600px) and (min-height: 600px) {
 		.standard-arrow { display: none; }
 		.landscape-arrow { display: inline-block; }
 		.landscape-arrow.inactive { opacity: 1; filter: none; }
