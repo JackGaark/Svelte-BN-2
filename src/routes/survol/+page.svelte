@@ -37,7 +37,7 @@
 				class:project-highlighted={activeProject === tile.project.slug}
 				style:--highlight-delay={`${(tile.number - 1) * 85}ms`}
 				data-project={tile.project.slug}
-				href={`/projet/${tile.project.slug}?slide=${tile.number}`}
+				href={`/projet/${tile.project.slug}?image=${tile.number}`}
 				onpointerenter={(event) => previewProject(event, tile.project.slug)}
 				onpointerleave={() => (hoveredProject = null)}
 				onfocus={() => (hoveredProject = tile.project.slug)}

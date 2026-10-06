@@ -46,7 +46,7 @@ export const indexPreviewFormats = {
 } as const;
 const previewPattern = ['landscape', 'portrait', 'square'] as const;
 // Shuffled text positions stay fixed so thumbnail links always open the same slide.
-// Positions are zero-based and count toward the total gallery length.
+// Positions are zero-based in the combined sequence; text slides are additional to images.
 const textSlidePositions: Record<number, number[]> = {
 	2: [3, 8],
 	5: [1, 6],
