@@ -388,17 +388,20 @@
 		.index-shell :global(.nav-1) { grid-column: 3; }
 		.index-shell :global(.nav-2) { grid-column: 4; }
 		.standard-index-footer, .landscape-index-footer { display: none; }
-		.mobile-index-footer { display: block; position: relative; height: 374px; overflow: clip; }
-		.mobile-footer-art { position: absolute; top: 187.13px; left: 50%; transform: translateX(-50%); }
+		.mobile-index-footer { display: block; position: relative; height: calc(374 / 402 * 100vw); overflow: clip; }
+		.mobile-footer-art { position: absolute; top: calc(50% + .13px * var(--mobile-footer-scale)); left: calc(50% - .1px * var(--mobile-footer-scale)); transform: translateX(-50%); }
 		.mobile-footer-art img { transform: scale(var(--mobile-footer-scale, 1)); transform-origin: top center; }
-		.mobile-footer-details { position: absolute; bottom: 16px; left: 20px; right: 20px; display: grid; grid-template-columns: 1fr auto 1fr; font-size: 12px; line-height: 8px; letter-spacing: .24px; }
-		.mobile-footer-details > :last-child { text-align: right; }
+		.mobile-footer-details { position: absolute; bottom: 16px; left: 20px; right: 20px; height: 8px; font-size: 12px; line-height: normal; letter-spacing: .24px; }
+		.mobile-footer-details > * { position: absolute; top: 0; height: 8px; text-box-trim: trim-both; text-box-edge: cap alphabetic; white-space: nowrap; }
+		.mobile-footer-details > :first-child { left: 0; width: 86px; color: #333; }
+		.mobile-footer-details > :nth-child(2) { left: 50%; width: 178px; transform: translateX(-50%); text-align: center; color: #000; }
+		.mobile-footer-details > :last-child { right: 0; width: 86px; text-align: right; color: #000; }
 	}
 	@media (max-width: 599px) {
-		.mobile-index-footer { --mobile-footer-scale: calc((100vw - 13px) / 389px); }
+		.mobile-index-footer { --mobile-footer-scale: calc((100vw - 40px) / 362px); }
 	}
 	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
-		.mobile-index-footer { height: 756px; --mobile-footer-scale: calc((100vw + 24px) / 898px); }
-		.mobile-footer-art { top: 378.47px; }
+		.mobile-index-footer { height: calc(756 / 874 * 100vw); --mobile-footer-scale: calc((100vw - 40px) / 834px); }
+		.mobile-footer-art { top: calc(50% + .4705px * var(--mobile-footer-scale)); left: 50%; }
 	}
 </style>
