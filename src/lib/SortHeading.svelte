@@ -59,4 +59,10 @@
 		.landscape-arrow.inactive { opacity: 1; filter: none; }
 		.landscape-arrow.inactive.down-arrow { opacity: 0.5; }
 	}
+
+	@media (max-width: 599px), (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.standard-arrow { display: none; }
+		.landscape-arrow { display: inline-block; content: url('/assets/mobile-index-sort-up.svg'); filter: none; opacity: 1; margin-left: 7px; }
+		.landscape-arrow.down-arrow { content: url('/assets/mobile-index-sort-down.svg'); }
+	}
 </style>

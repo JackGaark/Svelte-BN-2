@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { projects as projectData } from './data';
 	import SortHeading from './SortHeading.svelte';
 	import { sortColumns, type SortKey, type SortDirection } from './projectSort';
@@ -10,6 +11,9 @@
 	} = $props();
 	let expanded = $state<string[]>([]);
 	let width = $state(1024);
+	onMount(() => {
+		if (window.matchMedia('(max-width: 599px), (max-width: 1023px) and (max-height: 599px) and (orientation: landscape)').matches) expanded = [projects[0].slug];
+	});
 	const allExpanded = $derived(expanded.length === projects.length);
 	function toggle(slug: string) {
 		expanded = expanded.includes(slug)
@@ -33,6 +37,7 @@
 		<span class="standard-label">{allExpanded ? 'Collapse All' : 'Expand All'}</span>
 		<span class="landscape-label">{allExpanded ? 'Réduire tout' : 'Développer tout'}</span>
 		<img class="landscape-expand" src="/assets/tablet-index-expand.svg" alt="" />
+		<img class="mobile-expand" src="/assets/mobile-index-expand.svg" alt="" />
 		<span class="standard-expand" aria-hidden="true"
 			>{allExpanded ? '⌃' : '⌄'}</span
 		>
@@ -66,13 +71,14 @@
 				><span class="project-dates">{project.start} <span>à</span> {project.end}</span>
 			</button>
 			{#if open}
-				<div class="mobile-divider" aria-hidden="true"></div>
+				<div class="mobile-divider" aria-hidden="true"><picture><source media="(orientation: landscape)" srcset="/assets/mobile-index-landscape-rule.svg" /><img src="/assets/mobile-index-rule.svg" alt="" /></picture></div>
 			{/if}
 		</article>
 	{/each}
 </section>
 
 <style>
+	.mobile-expand { display: none; }
 	.landscape-label,
 	.landscape-expand,
 	.landscape-rule { display: none; }
@@ -331,5 +337,34 @@
 		.project-toggle { min-height: 22px; }
 		.project-toggle > span:first-child { padding-left: 1px; }
 		.project-image img { aspect-ratio: 728 / 546; }
+	}
+
+	@media (max-width: 599px), (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.tablet-index { --mobile-rule-scale: calc((100vw - 40px) / 362px); padding: 10px 20px 0; min-height: 1026px; font-size: 14px; line-height: 12px; color: #333; }
+		.standard-label, .standard-expand { display: none; }
+		.landscape-label, .mobile-expand { display: block; }
+		.expand-all { height: 15px; min-height: 15px; margin-bottom: 9px; gap: 7px; color: #222; }
+		.columns { grid-template-columns: minmax(0, 176fr) minmax(0, 84fr) minmax(0, 86fr); gap: 8px; }
+		.headings, .first-expanded .headings { height: 15px; margin-bottom: 28px; font-weight: 400; text-transform: uppercase; color: #222; }
+		.headings :global(button), .landscape-label { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+		article { display: flex; flex-direction: column; position: relative; }
+		.project-toggle, .expanded .project-toggle { order: -1; min-height: 22px; padding: 0; }
+		.expanded .project-toggle { min-height: 19px; }
+		.project-image { width: 100%; }
+		.project-image img { aspect-ratio: 362 / 272; }
+		.expanded { margin-bottom: 13px; border: 0; }
+		.project-dates { display: grid; grid-template-columns: minmax(0, 36fr) minmax(0, 20fr) minmax(0, 30fr); gap: 0; }
+		.project-dates > span { text-align: center; }
+		.mobile-divider { position: absolute; top: -3px; left: 0; width: 100%; height: 1px; mask: none; background: none; }
+		.mobile-divider img { transform: scaleX(var(--mobile-rule-scale)); transform-origin: left; }
+	}
+	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.tablet-index { --mobile-rule-scale: calc((100vw - 40px) / 834px); width: 100%; min-width: 0; min-height: 1124px; }
+		.columns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+		.project-status { display: block; }
+		.project-image { width: min(100%, calc((100vw - 40px) * 508 / 834)); }
+		.project-image img { aspect-ratio: 508 / 381; }
+		.expanded { margin-bottom: 20px; }
+		.project-dates { grid-template-columns: 36px 20px 30px; justify-content: start; }
 	}
 </style>
