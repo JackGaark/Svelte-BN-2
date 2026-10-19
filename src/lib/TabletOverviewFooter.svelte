@@ -1,18 +1,19 @@
 <script lang="ts">
 	import BlinkingEye from './BlinkingEye.svelte';
 	let { indexDesign = false }: { indexDesign?: boolean } = $props();
+	// Scale the visible artwork span; keep its outer edges at fixed 20px insets.
 	let width = $state(768);
 </script>
 
 <footer class="tablet-footer" class:index-design={indexDesign} bind:clientWidth={width}>
 	<a class="art-link" href="/" aria-label="Bureau Normal — Retour à l’accueil">
-		<span class="art portrait-art" style:transform={`scale(${width / 768})`} aria-hidden="true">
+		<span class="art portrait-art" style:transform={`translateX(${20 - 20.894 * (width - 40) / 725.442}px) scale(${(width - 40) / 725.442})`} aria-hidden="true">
 			<img class="symbol" src="/assets/tablet-portrait-symbol.svg" alt="" />
 			<img class="wordmark" src="/assets/tablet-portrait-wordmark.svg" alt="" />
 			<span class="bottom-eye"><BlinkingEye delay={0.15} /></span>
 			<span class="top-eye"><BlinkingEye /></span>
 		</span>
-		<span class="art landscape-art" style:transform={`scale(${width / 1024})`} aria-hidden="true">
+		<span class="art landscape-art" style:transform={`translateX(${20 - 20 * (width - 40) / 985.115}px) scale(${(width - 40) / 985.115})`} aria-hidden="true">
 			<img class="symbol" src="/assets/tablet-landscape-symbol.svg" alt="" />
 			<img class="wordmark" src="/assets/tablet-landscape-wordmark.svg" alt="" />
 			<span class="bottom-eye"><BlinkingEye delay={0.15} /></span>

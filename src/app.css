@@ -875,7 +875,8 @@ a:hover {
 		left: 20px;
 		right: 20px;
 	}
-	.landing-mark img { object-position: left bottom; }
+	.landing-mark { top: auto; }
+	.landing-mark img { height: auto; object-position: left bottom; }
 }
 @media (max-width: 599px) {
 	.landing {

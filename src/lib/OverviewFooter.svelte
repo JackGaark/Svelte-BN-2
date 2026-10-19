@@ -12,7 +12,9 @@
 		aria-label="Bureau Normal — Retour à l’accueil"
 		bind:clientWidth={width}
 	>
-		<span class="overview-footer-art" style:transform={`scale(${width / 1440})`} aria-hidden="true">
+		<span class="overview-footer-art" style:--art-scale={width / 1440}
+			style:--responsive-art-scale={width / (indexDesign ? 1397.6985 : 1396.3875)}
+			style:--responsive-art-left={`${-21.0595 * width / (indexDesign ? 1397.6985 : 1396.3875)}px`} aria-hidden="true">
 			<img class="footer-safety" src="/assets/overview-footer-safety.svg" alt="" />
 			<img
 				class="footer-symbol"
@@ -45,6 +47,7 @@
 		aspect-ratio: 1440 / 566.125;
 	}
 	.overview-footer-art {
+		transform: scale(var(--art-scale));
 		position: absolute;
 		width: 1440px;
 		height: 566.125px;
@@ -79,6 +82,14 @@
 	.overview-footer :global(.site-footer) {
 		margin-top: clamp(16px, 2.2875vw, 32.94px);
 		min-height: 0;
+	}
+	/* Exclude the artwork’s internal safety zone from the 20px outer margins. */
+	@media (max-width: 1199px), (max-width: 1366px) and (pointer: coarse) {
+		.overview-footer-art {
+			left: var(--responsive-art-left);
+			transform: scale(var(--responsive-art-scale));
+		}
+		.overview-footer-logo { aspect-ratio: 1396.3875 / 566.125; }
 	}
 	/* The desktop index uses the updated 1440 × 641 footer composition. */
 	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
