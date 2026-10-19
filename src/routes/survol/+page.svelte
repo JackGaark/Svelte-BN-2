@@ -76,7 +76,7 @@
 	.overview {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 3px;
+		gap: 6px;
 		margin-inline: var(--margin);
 	}
 	/* Both dimensions must clear the phone range, including rotated phones. */
@@ -96,6 +96,9 @@
 			gap: 8px;
 			min-height: calc(134.474826vw - 64px);
 		}
+	}
+	@media (min-width: 1200px) and (max-width: 1366px) and (pointer: coarse) {
+		.overview { gap: 6px; }
 	}
 	@media (min-width: 1200px) {
 		.project-tile .tile-project {
