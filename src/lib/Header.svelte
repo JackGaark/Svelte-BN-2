@@ -41,16 +41,20 @@
 			padding-top: 20px;
 			height: 64px;
 			grid-template-rows: max-content;
-			align-items: end;
+			align-items: baseline;
 		}
-		.site-header.page-navigation .nav-link {
+		.site-header.page-navigation .brand,
+		.site-header.page-navigation .brand picture {
+			display: flex;
+			align-items: baseline;
+		}
+		.site-header.design-grid.page-navigation .nav-link {
 			font-size: 14px;
 			font-weight: 400;
-			line-height: normal;
+			line-height: 1;
 			margin-top: 0;
 			translate: none;
-			text-box-trim: trim-both;
-			text-box-edge: cap alphabetic;
+			text-box-trim: none;
 		}
 	}
 
