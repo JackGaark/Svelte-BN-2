@@ -1,19 +1,36 @@
 import { error } from '@sveltejs/kit';
 import { projects } from '$lib/data';
 import { projectSlides } from '$lib/projectGallery';
-export function load({ params, url }: { params: { slug: string }; url: URL }) {
+import type { PageLoad } from './$types';
+
+type Slides = ReturnType<typeof projectSlides>;
+
+function resolveInitialSlide(slides: Slides, params: URLSearchParams): number {
+	if (params.has('image')) {
+		const imageNumber = Number(params.get('image'));
+		const byImage = slides.findIndex(
+			(slide) => slide.kind === 'image' && slide.imageNumber === imageNumber
+		);
+		if (byImage >= 0) return byImage;
+	}
+
+	const slideNumber = Number(params.get('slide') ?? 1);
+	const isValid = Number.isInteger(slideNumber) && slideNumber >= 1 && slideNumber <= slides.length;
+	return isValid ? slideNumber - 1 : 0;
+}
+
+export const load: PageLoad = ({ params, url }) => {
 	const index = projects.findIndex((p) => p.slug === params.slug);
 	if (index < 0) error(404, 'Projet introuvable');
+
 	const slides = projectSlides(params.slug);
-	const requestedSlide = Number(url.searchParams.get('slide') ?? 1);
-	const requestedImage = Number(url.searchParams.get('image'));
-	const imageSlide = url.searchParams.has('image')
-		? slides.findIndex((slide) => slide.kind === 'image' && slide.imageNumber === requestedImage) : -1;
+	const count = projects.length;
+
 	return {
 		slides,
-		initialSlide: imageSlide >= 0 ? imageSlide : Number.isInteger(requestedSlide) && requestedSlide >= 1 && requestedSlide <= slides.length ? requestedSlide - 1 : 0,
+		initialSlide: resolveInitialSlide(slides, url.searchParams),
 		project: projects[index],
-		previous: projects[(index + projects.length - 1) % projects.length].slug,
-		next: projects[(index + 1) % projects.length].slug
+		previous: projects[(index + count - 1) % count].slug,
+		next: projects[(index + 1) % count].slug
 	};
-}
+};

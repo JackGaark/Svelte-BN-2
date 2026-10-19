@@ -43,6 +43,7 @@
 	button {
 		text-align: left;
 		text-transform: inherit;
+		white-space: nowrap;
 	}
 	img {
 		filter: brightness(0);

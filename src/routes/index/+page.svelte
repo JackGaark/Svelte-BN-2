@@ -271,7 +271,14 @@
 		grid-template-columns: 44px 24px 36px;
 		gap: 0;
 	}
-	.dates > span { width: 12px; text-align: center; }
+	.dates > span {
+		width: 19px;
+		margin-left: -8px;
+		text-align: center;
+		padding-top: 2px;
+		text-box-trim: trim-both;
+		text-box-edge: cap alphabetic;
+	}
 	.selection-rule {
 		clip-path: inset(-1px 0 -1px var(--selection-left));
 		position: absolute;

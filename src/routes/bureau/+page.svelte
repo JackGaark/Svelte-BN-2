@@ -41,6 +41,16 @@
 <OverviewFooter indexDesign />
 
 <style>
+	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px),
+		(min-width: 1200px) and (max-width: 1366px) and (min-height: 600px) and (pointer: coarse) {
+		.bureau-page { margin-inline: 20px; }
+		.bureau-page h1 {
+			font-size: 28px;
+			line-height: 1.15;
+			text-box-trim: trim-both;
+			text-box-edge: cap alphabetic;
+		}
+	}
 	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
 		.bureau-page {
 			color: #000;

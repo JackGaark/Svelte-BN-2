@@ -870,9 +870,17 @@ a:hover {
 }
 
 /* Keep the introduction in normal flow on narrow, short screens. */
+@media (max-width: 1366px) {
+	.landing-mark {
+		left: 20px;
+		right: 20px;
+	}
+	.landing-mark img { object-position: left bottom; }
+}
 @media (max-width: 599px) {
 	.landing {
 		min-height: 0;
+		padding-inline: 20px;
 	}
 	.landing-mark {
 		position: relative;
