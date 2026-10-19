@@ -40,12 +40,14 @@
 			gap: 8px;
 			padding-top: 20px;
 			height: 64px;
+			grid-template-rows: max-content;
+			align-items: end;
 		}
 		.site-header.page-navigation .nav-link {
 			font-size: 14px;
 			font-weight: 400;
 			line-height: normal;
-			margin-top: 16px;
+			margin-top: 0;
 			translate: none;
 			text-box-trim: trim-both;
 			text-box-edge: cap alphabetic;
