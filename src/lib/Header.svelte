@@ -35,7 +35,7 @@
 
 <style>
 	.site-header .nav-link {
-		text-underline-offset: 5px;
+		text-underline-offset: 2px;
 		text-decoration-thickness: 1px;
 		text-decoration-skip-ink: none;
 	}
