@@ -25,19 +25,20 @@
 <section
 	class="tablet-index"
 	bind:clientWidth={width}
-	style:--line-scale={(width - (width < 900 ? 40 : 38)) / 986}
+	style:--line-scale={(width - 40) / 986}
 	class:first-expanded={expanded.includes(projects[0].slug)}
 	aria-label="Index des projets"
 >
 	<button
 		class="expand-all"
+		class:all-expanded={allExpanded}
 		aria-expanded={allExpanded}
 		onclick={() => (expanded = allExpanded ? [] : projects.map((project) => project.slug))}
 	>
 		<span class="standard-label">{allExpanded ? 'Collapse All' : 'Expand All'}</span>
 		<span class="landscape-label">{allExpanded ? 'Réduire tout' : 'Développer tout'}</span>
-		<img class="landscape-expand" src="/assets/tablet-index-expand.svg" alt="" />
-		<img class="mobile-expand" src="/assets/mobile-index-expand.svg" alt="" />
+		<img class="landscape-expand" src={allExpanded ? "/assets/index-collapse.svg" : "/assets/tablet-index-expand.svg"} alt="" />
+		<img class="mobile-expand" src={allExpanded ? "/assets/index-collapse.svg" : "/assets/mobile-index-expand.svg"} alt="" />
 		<span class="standard-expand" aria-hidden="true"
 			>{allExpanded ? '⌃' : '⌄'}</span
 		>
@@ -78,6 +79,7 @@
 </section>
 
 <style>
+	.all-expanded .landscape-expand, .all-expanded .mobile-expand { position: absolute; left: 79px; top: 0; }
 	.mobile-expand { display: none; }
 	.landscape-label,
 	.landscape-expand,
@@ -96,6 +98,7 @@
 		padding: 12px var(--margin) 200px;
 	}
 	.expand-all {
+		position: relative;
 		display: flex;
 		align-items: center;
 		gap: 28px;
@@ -278,7 +281,7 @@
 			font-size: 14px;
 			line-height: 15px;
 			color: #333;
-			padding: 10px 18px 0 20px;
+			padding: 10px 20px 0;
 			min-height: calc(915 / 1024 * 100vw - 64px);
 		}
 		.expand-all {
