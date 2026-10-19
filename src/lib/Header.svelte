@@ -34,6 +34,15 @@
 </header>
 
 <style>
+	.site-header .nav-link {
+		text-underline-offset: 5px;
+		text-decoration-thickness: 1px;
+		text-decoration-skip-ink: none;
+	}
+	.site-header .nav-link.active {
+		text-decoration-line: underline;
+	}
+
 	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
 		.site-header .nav-link {
 			font-size: 14px;

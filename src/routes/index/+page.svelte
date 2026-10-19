@@ -179,7 +179,6 @@
 			text-box-trim: trim-both;
 			text-box-edge: cap alphabetic;
 		}
-		.index-shell :global(.nav-link.active) { text-decoration: none; }
 		.index-shell :global(.nav-0) { grid-column: 4; }
 		.index-shell :global(.nav-1) { grid-column: 5; }
 		.index-shell :global(.nav-2) { grid-column: 6; }
@@ -201,8 +200,7 @@
 				text-box-trim: trim-both;
 				text-box-edge: cap alphabetic;
 			}
-			.index-shell :global(.nav-link.active) { text-decoration: none; }
-			.index-shell :global(.nav-0) {
+				.index-shell :global(.nav-0) {
 				grid-column: 6;
 			}
 			.index-shell :global(.nav-1) {
@@ -300,19 +298,7 @@
 			text-box-trim: trim-both;
 			text-box-edge: cap alphabetic;
 		}
-		.index-shell :global(.nav-link.active) {
-			position: relative;
-			text-decoration: none;
-		}
-		.index-shell :global(.nav-link.active)::after {
-			content: '';
-			position: absolute;
-			left: 0;
-			top: 12px;
-			width: 29px;
-			height: 1px;
-			background: url('/assets/index-nav-underline.svg') no-repeat;
-		}
+
 	}
 	@media (max-width: 1023px) {
 		.index-preview-rail {
@@ -339,9 +325,6 @@
 		}
 		.index-shell :global(.nav-link) {
 			margin-top: 0;
-		}
-		.index-shell :global(.nav-link.active) {
-			text-underline-offset: 3px;
 		}
 		.index-preview-rail {
 			width: 100%;
@@ -381,16 +364,13 @@
 		.index-shell :global(.nav-0) { grid-column: 2; }
 		.index-shell :global(.nav-1) { grid-column: 3; }
 		.index-shell :global(.nav-2) { grid-column: 4; }
-		.index-shell :global(.nav-link.active) {
-			text-underline-offset: 3px;
-		}
 	}
 
 	@media (max-width: 599px), (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
 		.index-shell { --ink: #333; }
 		.index-shell :global(.site-header) { margin-inline: 20px; height: 64px; padding-top: 20px; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 		.index-shell :global(.brand img) { content: url('/assets/mobile-index-logo.svg'); width: auto; height: auto; }
-		.index-shell :global(.nav-link) { font-size: 14px; line-height: normal; margin-top: 16px; translate: none; text-box-trim: trim-both; text-box-edge: cap alphabetic; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
+		.index-shell :global(.nav-link) { font-size: 14px; line-height: normal; margin-top: 16px; translate: none; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
 		.index-shell :global(.nav-0) { grid-column: 2; }
 		.index-shell :global(.nav-1) { grid-column: 3; }
 		.index-shell :global(.nav-2) { grid-column: 4; }
