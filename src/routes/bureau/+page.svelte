@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Header from '$lib/Header.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
+	import TabletOverviewFooter from '$lib/TabletOverviewFooter.svelte';
 </script>
 
 <svelte:head><title>Bureau — Bureau Normal</title></svelte:head>
 <Header />
 <main id="main" class="bureau-page design-grid" data-node-id="3153:8448">
 	<h1>
-		En quoi normal, bureau de quoi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id
+		<span class="standard-intro">En quoi normal, bureau de quoi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id
 		odio neque. In hac habitasse platea dictumst. Nunc auctor tortor finibus, facilisis nunc sed,
-		mattis augue.
+		mattis augue.</span>
+		<span class="tablet-portrait-intro">Project text. Lorem ipsum dolor sit amet, consectetur elit. Ut orci ex, pulvinar sit amet rhoncus non, molestie in nulla. Phasellus iaculis quis quam molestie consectetur. Etiam nisi metus, vestibulum in placerat ut, condimentum non magna.</span>
 	</h1>
 	<div class="portrait">Photo de vous :)</div>
 	<div class="bureau-copy">
@@ -38,9 +40,68 @@
 		>
 	</address>
 </main>
-<OverviewFooter indexDesign />
+<div class="bureau-standard-footer"><OverviewFooter indexDesign /></div>
+<div class="bureau-tablet-footer"><TabletOverviewFooter indexDesign contacts={false} /></div>
 
 <style>
+	.tablet-portrait-intro, .bureau-tablet-footer { display: none; }
+	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px) and (orientation: portrait),
+		(min-width: 1200px) and (max-width: 1366px) and (pointer: coarse) and (orientation: portrait) {
+		.bureau-page {
+			padding-top: 44px;
+			padding-bottom: 0;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			grid-template-rows: minmax(336px, auto) 46px minmax(231px, auto) 71px auto;
+			gap: 0 6px;
+			min-height: 746px;
+		}
+		.bureau-page h1 {
+			grid-column: 1 / -1;
+			grid-row: 1;
+			width: calc(100% * 482 / 728);
+			margin-top: 2px;
+			padding-left: 0;
+			align-self: start;
+		}
+		.standard-intro { display: none; }
+		.tablet-portrait-intro { display: inline; }
+		.portrait {
+			grid-column: 1 / -1;
+			grid-row: 1;
+			justify-self: end;
+			margin-right: 2px;
+			width: calc(100% * 238 / 728);
+			height: auto;
+			aspect-ratio: 238 / 336;
+			align-self: start;
+		}
+		.bureau-copy {
+			grid-column: 1 / -1;
+			grid-row: 3;
+			width: calc(100% * 360 / 728);
+			font-size: 14px;
+			line-height: 14px;
+			color: #000;
+		}
+		.bureau-copy p + p { margin-top: 14px; }
+		.contact {
+			grid-column: 1 / -1;
+			grid-row: 5;
+			width: calc(100% * 482 / 728);
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 6px;
+			margin-top: 0;
+			font-size: 10px;
+			letter-spacing: .2px;
+			line-height: 11px;
+			align-items: start;
+			color: #000;
+		}
+		.contact > * { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+		.bureau-standard-footer { display: none; }
+		.bureau-tablet-footer { display: block; }
+	}
+
 	@media (min-width: 600px) and (max-width: 1199px) and (min-height: 600px),
 		(min-width: 1200px) and (max-width: 1366px) and (min-height: 600px) and (pointer: coarse) {
 		.bureau-page { margin-inline: 20px; }
