@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import type { projects as projectData } from './data';
 	import SortHeading from './SortHeading.svelte';
+	import DateRange from './DateRange.svelte';
 	import { sortColumns, type SortKey, type SortDirection } from './projectSort';
 	let { projects, sortKey, sortDirection, onchangeSort }: {
 		projects: typeof projectData;
@@ -69,7 +70,7 @@
 			>
 				<span>{project.title}</span><span>{project.type}</span><span class="project-status"
 					>{project.status}</span
-				><span class="project-dates">{project.start} <span>à</span> {project.end}</span>
+				><span class="project-dates"><DateRange start={project.start} end={project.end} /></span>
 			</button>
 			{#if open}
 				<div class="mobile-divider" aria-hidden="true"><picture><source media="(orientation: landscape)" srcset="/assets/mobile-index-landscape-rule.svg" /><img src="/assets/mobile-index-rule.svg" alt="" /></picture></div>
@@ -132,10 +133,7 @@
 		min-width: 0;
 		overflow-wrap: anywhere;
 	}
-	.project-dates {
-		display: flex;
-		gap: 12px;
-	}
+	.project-dates { display: block; min-width: 0; }
 	.project-image[hidden] {
 		display: none;
 	}
@@ -216,10 +214,6 @@
 			min-height: 19px;
 			padding: 3px 0 4px;
 		}
-		.project-dates {
-			gap: 3px;
-			white-space: nowrap;
-		}
 		.project-image {
 			width: 100%;
 		}
@@ -258,9 +252,6 @@
 		.project-toggle {
 			min-height: 14px;
 			padding: 0 0 2px;
-		}
-		.project-dates {
-			justify-content: space-between;
 		}
 		.project-image img {
 			aspect-ratio: 515 / 334.424;
@@ -321,12 +312,6 @@
 			min-height: 27px;
 		}
 		.expanded .project-toggle { min-height: 17px; }
-		.project-dates {
-			display: grid;
-			grid-template-columns: 44px 24px 36px;
-			gap: 0;
-		}
-		.project-dates > span { width: 12px; text-align: center; }
 		.project-image { width: 100%; }
 		.project-image img { aspect-ratio: 986 / 740; }
 		.expanded { border: 0; margin-bottom: 10px; }
@@ -356,8 +341,6 @@
 		.project-image { width: 100%; }
 		.project-image img { aspect-ratio: 362 / 272; }
 		.expanded { margin-bottom: 13px; border: 0; }
-		.project-dates { display: grid; grid-template-columns: minmax(0, 36fr) minmax(0, 20fr) minmax(0, 30fr); gap: 0; }
-		.project-dates > span { text-align: center; }
 		.mobile-divider { position: absolute; top: -3px; left: 0; width: 100%; height: 1px; mask: none; background: none; }
 		.mobile-divider img { transform: scaleX(var(--mobile-rule-scale)); transform-origin: left; }
 	}
@@ -368,7 +351,6 @@
 		.project-image { width: min(100%, calc((100vw - 40px) * 508 / 834)); }
 		.project-image img { aspect-ratio: 508 / 381; }
 		.expanded { margin-bottom: 20px; }
-		.project-dates { grid-template-columns: 36px 20px 30px; justify-content: start; }
 	}
 	.tablet-index { min-height: 0; padding-bottom: 0; }
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import Header from '$lib/Header.svelte';
+	import DateRange from '$lib/DateRange.svelte';
 	import OverviewFooter from '$lib/OverviewFooter.svelte';
 	import TabletOverviewFooter from '$lib/TabletOverviewFooter.svelte';
 	import IndexAccordion from '$lib/IndexAccordion.svelte';
@@ -126,7 +127,7 @@
 					>
 						<span role="cell">{project.title}</span><span role="cell">{project.type}</span><span
 							role="cell">{project.status}</span
-						><span role="cell" class="dates">{project.start}<span>à</span>{project.end}</span>
+						><span role="cell" class="dates"><DateRange start={project.start} end={project.end} /></span>
 					</a>
 				{/each}
 			</div>
@@ -263,20 +264,8 @@
 		border: 0;
 		line-height: 15px;
 	}
+	.dates { display: block; }
 	.list-row.selected { color: inherit; }
-	.dates {
-		display: grid;
-		grid-template-columns: 44px 24px 36px;
-		gap: 0;
-	}
-	.dates > span {
-		width: 19px;
-		margin-left: -8px;
-		text-align: center;
-		padding-top: 2px;
-		text-box-trim: trim-both;
-		text-box-edge: cap alphabetic;
-	}
 	.selection-rule {
 		clip-path: inset(-1px 0 -1px var(--selection-left));
 		position: absolute;
