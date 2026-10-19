@@ -65,7 +65,7 @@
 	</main>
 </div>
 <div class="standard-footer"><OverviewFooter /></div>
-<div class="tablet-footer"><TabletOverviewFooter /></div>
+<div class="tablet-footer"><TabletOverviewFooter indexDesign /></div>
 </div>
 
 <style>
@@ -134,4 +134,5 @@
 			.overview { min-height: calc(1138 / 1024 * 100vw - 64px); }
 		}
 	}
+	.overview { min-height: 0; padding-bottom: 0; }
 </style>

@@ -5,7 +5,10 @@
 	let width = $state(1440);
 </script>
 
-<div class="overview-footer" class:index-design={indexDesign} data-node-id={indexDesign ? '3153:6235' : '2919:1045'}>
+<div class="overview-footer" class:index-design={indexDesign}
+	style:--footer-scale={width / 1440}
+	style:--responsive-footer-scale={width / (indexDesign ? 1397.6985 : 1396.3875)}
+	data-node-id={indexDesign ? '3153:6235' : '2919:1045'}>
 	<a
 		class="overview-footer-logo"
 		href="/"
@@ -38,6 +41,7 @@
 <style>
 	.overview-footer {
 		overflow: clip;
+		padding-top: calc(var(--footer-logo-gap) - 27.801px * var(--footer-scale));
 	}
 	.overview-footer-logo {
 		display: block;
@@ -85,6 +89,7 @@
 	}
 	/* Exclude the artwork’s internal safety zone from the 20px outer margins. */
 	@media (max-width: 1199px), (max-width: 1366px) and (pointer: coarse) {
+		.overview-footer { padding-top: calc(var(--footer-logo-gap) - 27.801px * var(--responsive-footer-scale)); }
 		.overview-footer-art {
 			left: var(--responsive-art-left);
 			transform: scale(var(--responsive-art-scale));
@@ -93,7 +98,7 @@
 	}
 	/* The desktop index uses the updated 1440 × 641 footer composition. */
 	@media (min-width: 1200px) and (pointer: fine), (min-width: 1367px) {
-		.index-design { min-height: calc(641 / 1440 * 100vw + 1px); }
+		.index-design { padding-top: calc(var(--footer-logo-gap) - 28px * var(--footer-scale)); min-height: calc(641 / 1440 * 100vw + 1px); }
 		.index-design .overview-footer-logo {
 			width: 100%;
 			margin-inline: 0;

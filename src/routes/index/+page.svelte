@@ -391,4 +391,11 @@
 		.mobile-index-footer { height: calc(756 / 874 * 100vw); --mobile-footer-scale: calc((100vw - 40px) / 834px); }
 		.mobile-footer-art { top: calc(50% + .4705px * var(--mobile-footer-scale)); left: 50%; }
 	}
+	.index-page { min-height: 0; }
+	@media (max-width: 599px), (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.mobile-footer-art { top: calc(var(--footer-logo-gap) - 8px * var(--mobile-footer-scale)); }
+	}
+	@media (max-width: 1023px) and (max-height: 599px) and (orientation: landscape) {
+		.mobile-footer-art { top: calc(var(--footer-logo-gap) - 18px * var(--mobile-footer-scale)); }
+	}
 </style>

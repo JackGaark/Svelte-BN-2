@@ -370,4 +370,5 @@
 		.expanded { margin-bottom: 20px; }
 		.project-dates { grid-template-columns: 36px 20px 30px; justify-content: start; }
 	}
+	.tablet-index { min-height: 0; padding-bottom: 0; }
 </style>

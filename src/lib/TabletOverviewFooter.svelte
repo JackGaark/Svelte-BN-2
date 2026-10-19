@@ -5,7 +5,7 @@
 	let width = $state(768);
 </script>
 
-<footer class="tablet-footer" class:index-design={indexDesign} bind:clientWidth={width}>
+<footer class="tablet-footer" class:index-design={indexDesign} bind:clientWidth={width} style:--portrait-scale={(width - 40) / 725.442} style:--landscape-scale={(width - 40) / 985.115}>
 	<a class="art-link" href="/" aria-label="Bureau Normal — Retour à l’accueil">
 		<span class="art portrait-art" style:transform={`translateX(${20 - 20.894 * (width - 40) / 725.442}px) scale(${(width - 40) / 725.442})`} aria-hidden="true">
 			<img class="symbol" src="/assets/tablet-portrait-symbol.svg" alt="" />
@@ -53,19 +53,19 @@
 	.copyright-only > span { grid-column: 3; }
 	.details > * { text-box-trim: trim-both; text-box-edge: cap alphabetic; white-space: nowrap; }
 	@media (orientation: portrait) {
-		.index-design { height: calc(666 / 768 * 100vw); }
+		.index-design { height: calc(var(--footer-logo-gap) + 318.433px * var(--portrait-scale)); }
 		.index-design .art-link { height: calc(607 / 666 * 100%); }
-		.index-design .portrait-art { top: 50%; }
-		.index-design .details { top: calc(644 / 666 * 100%); grid-template-columns: calc(116 / 768 * 100vw) calc(116 / 768 * 100vw) calc(68 / 768 * 100vw); column-gap: calc(6 / 768 * 100vw); }
+		.index-design .portrait-art { top: calc(var(--footer-logo-gap) - 14.52px * var(--portrait-scale)); }
+		.index-design .details { top: auto; bottom: 16px; grid-template-columns: calc(116 / 768 * 100vw) calc(116 / 768 * 100vw) calc(68 / 768 * 100vw); column-gap: calc(6 / 768 * 100vw); }
 	}
 	@media (orientation: landscape) {
 		.tablet-footer { height: calc(428 / 1024 * 100vw); }
 		.portrait-art { display: none; }
 		.landscape-art { display: block; }
 		.details { top: 94.8598%; left: 62.5%; }
-		.index-design { height: calc(856 / 1024 * 100vw); }
+		.index-design { height: calc(var(--footer-logo-gap) + 409px * var(--landscape-scale)); }
 		.index-design .art-link { height: calc(800 / 856 * 100%); }
-		.index-design .landscape-art { top: 50%; }
-		.index-design .details { top: calc(834 / 856 * 100%); gap: 8px; }
+		.index-design .landscape-art { top: calc(var(--footer-logo-gap) - 19px * var(--landscape-scale)); }
+		.index-design .details { top: auto; bottom: 16px; gap: 8px; }
 	}
 </style>

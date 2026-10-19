@@ -127,4 +127,5 @@
 		.contact { margin-top: 56px; line-height: normal; align-items: start; }
 		.contact > * { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
 	}
+	.bureau-page { min-height: 0; padding-bottom: 0; }
 </style>
