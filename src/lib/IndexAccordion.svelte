@@ -81,7 +81,7 @@
 
 <style>
 	.all-expanded .landscape-expand, .all-expanded .mobile-expand { position: absolute; left: 79px; top: 0; }
-	.mobile-expand { display: none; }
+	.mobile-expand { display: none; position: absolute; left: 100px; top: 0; }
 	.landscape-label,
 	.landscape-expand,
 	.landscape-rule { display: none; }
@@ -101,7 +101,7 @@
 	.expand-all {
 		position: relative;
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: 28px;
 		min-height: 32px;
 		margin-bottom: 21px;
